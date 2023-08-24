@@ -1,0 +1,10 @@
+$dados = $database->get_results( "SELECT * FROM ".$table_dados." where id = $id" );
+
+
+$where = array( 'id' => $_POST['id'] );
+$query = $database->update( 'tabela', $_POST, $where, 1 );
+$idLast = $_POST['id'];
+
+
+$query = $database->insert( 'tabela', $_POST );
+$idLast = $database->lastid();
