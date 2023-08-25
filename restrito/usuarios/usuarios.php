@@ -1,7 +1,9 @@
 <?php
-include "./conexao.php";
-include "modelo.php";
-include "./base/DB.class.php";
+include "../conexao.php";
+include "../modelo.php";
+include "../base/DB.class.php";
+include "../base/Funcoes.class.php";
+
 $database = new DB();
 
 $dados = $database->get_results("SELECT * FROM usuarios");
@@ -29,10 +31,10 @@ $dados = $database->get_results("SELECT * FROM usuarios");
         <div class="card">
             <div class="card-header">
                 <div class="col-sm-6">
-                    <a type="button" data-toggle="modal" data-target="#staticBackdrop" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
+                    <a type="button" data-toggle="modal" data-target="#modal_user" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
                 </div>
-                <!-- Modal -->
-                <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <!-- Modal Cadastro -->
+                <div class="modal fade" id="modal_user" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -43,27 +45,27 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                             </div>
 
                             <div class="modal-body">
-                                <form>
+                                <form action="./cadastro_usuarios.php" method="POST" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col">
                                             <label for="nome">Nome:</label>
-                                            <input type="nome" class="form-control" placeholder="Digite...">
+                                            <input type="nome" class="form-control" name="nome" placeholder="Digite...">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col">
                                             <label for="login">Login:</label>
-                                            <input type="login" class="form-control" placeholder="Digite...">
+                                            <input type="login" class="form-control" name="login" placeholder="Digite...">
                                         </div>
                                         <div class="col">
-                                            <label for="password">Senha:</label>
-                                            <input type="password" class="form-control" placeholder="Digite...">
+                                            <label for="senha">Senha:</label>
+                                            <input type="password" class="form-control" name="senha" placeholder="Digite...">
                                         </div>
                                         </div>
                                         <div class="row">
                                         <div class="col">
                                             <label for="perfil">Perfil:</label>
-                                            <select class="form-control" id="exampleFormControlSelect1">
+                                            <select class="form-control" name="perfil">
                                                 <option>ADM</option>
                                                 <option>Guest</option>
                                                 <option>Usuário</option>
@@ -71,19 +73,19 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                                         </div>
                                         <div class="col">
                                         <label for="status">Status:</label>
-                                            <select class="form-control" id="exampleFormControlSelect1">
+                                            <select class="form-control" name="status">
                                                 <option>Ativo</option>
                                                 <option>Inativo</option>
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                    </div>
                                 </form>
                             </div>
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
-                                <button type="button" class="btn btn-primary">Salvar</button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -118,7 +120,7 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                                     <td>' . $valor['perfil'] . '</td>
                                     <td>' . $valor['status'] . '</td>
                                     <td width=150px>
-                                         <a href="#" class="btn btn-success btn-sm">Editar</a>
+                                         <a href="cadastro_edit.php?id=$id" class="btn btn-success btn-sm">Editar</a>
                                          <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirma" onclick ="pegar_dados(' . $valor['id'] . ', ' . $valor['nome'] . ')">Excluir</a>
                                      </td>
                                 </tr>';
