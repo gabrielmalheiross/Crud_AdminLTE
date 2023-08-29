@@ -1,15 +1,3 @@
-<?php
-include "../conexao.php";
-include "../modelo.php";
-include "../base/DB.class.php";
-include "../base/Funcoes.class.php";
-
-$database = new DB();
-
-$dados = $database->get_results("SELECT * FROM usuarios");
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,9 +5,32 @@ $dados = $database->get_results("SELECT * FROM usuarios");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tela de Usuários</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+
+    <?php
+    include "../conexao.php";
+
+    include "../base/DB.class.php";
+    include "../base/Funcoes.class.php";
+    include "../../validar.php";
+
+    $database = new DB();
+
+    $dados = $database->get_results("SELECT * FROM usuario");
+
+    ?>
 </head>
 
 <body>
+    <?php include "../template.php"; ?>
 
     <div class="content-wrapper px-4 py-2" style="min-height: 849px;">
         <div class="row mb-2">
@@ -61,8 +72,8 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                                             <label for="senha">Senha:</label>
                                             <input type="password" class="form-control" name="senha" placeholder="Digite...">
                                         </div>
-                                        </div>
-                                        <div class="row">
+                                    </div>
+                                    <div class="row">
                                         <div class="col">
                                             <label for="perfil">Perfil:</label>
                                             <select class="form-control" name="perfil">
@@ -72,7 +83,7 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                                             </select>
                                         </div>
                                         <div class="col">
-                                        <label for="status">Status:</label>
+                                            <label for="status">Status:</label>
                                             <select class="form-control" name="status">
                                                 <option>Ativo</option>
                                                 <option>Inativo</option>
@@ -85,7 +96,6 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                                     </div>
                                 </form>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -103,9 +113,8 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Nome</th>
-                            <th scope="col">Login</th>
                             <th scope="col">Perfil</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Login</th>
                             <th scope="col">Funções</th>
                         </tr>
                     </thead>
@@ -116,9 +125,8 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                                 <tr>
                                     <th scope="row">' . $valor['id'] . '</th>
                                     <td>' . $valor['nome'] . '</td> 
-                                    <td>' . $valor['login'] . '</td>
                                     <td>' . $valor['perfil'] . '</td>
-                                    <td>' . $valor['status'] . '</td>
+                                    <td>' . $valor['login'] . '</td>
                                     <td width=150px>
                                          <a href="cadastro_edit.php?id=$id" class="btn btn-success btn-sm">Editar</a>
                                          <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirma" onclick ="pegar_dados(' . $valor['id'] . ', ' . $valor['nome'] . ')">Excluir</a>
@@ -129,10 +137,16 @@ $dados = $database->get_results("SELECT * FROM usuarios");
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 
+    <!-- jQuery -->
+    <script src="/jadminlte/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/jadminlte/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/jadminlte/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
+    <!-- <script src="../../AdminLTE-3.2.0/dist/js/demo.js"></script> -->
 </body>
 
 </html>
