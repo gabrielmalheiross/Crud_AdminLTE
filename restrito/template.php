@@ -106,7 +106,8 @@
         </li>
         <li class="nav-item dropdown">
             <?php
-            echo '<a class="btn btn-danger" href="logout.php?token=' . md5(session_id()) . '">Sair</a>';
+            // echo '<a class="btn btn-danger" href="/jadminlte/restrito/logout.php">Sair</a>';
+            echo '<a class="btn btn-danger" href="/jadminlte/restrito/logout.php?token=' . md5(session_id()) . '">Sair</a>';
             ?>
 
             <!-- <a href="/jadminlte/restrito/logout.php" class="btn btn-danger" data-toggle="dropdown">
