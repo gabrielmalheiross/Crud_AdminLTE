@@ -2,6 +2,7 @@
     $login = $_POST['login'];
     $senha = md5($_POST['senha']);
     $entrar = $_POST['entrar'];
+    
 
 if (isset($entrar)) {
     include "./restrito/conexao.php";

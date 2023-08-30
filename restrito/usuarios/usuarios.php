@@ -24,8 +24,15 @@
 
     $database = new DB();
 
-    $dados = $database->get_results("SELECT * FROM usuario");
+    $perfils = $database->get_results("SELECT p.* FROM perfil p ");
 
+    $usuarios = $database->get_results("SELECT a.*
+                                        ,p.nome as perfil_nome
+                                        ,p.id as perfil_id
+                                        FROM usuario a 
+                                        LEFT JOIN perfil p on p.id = a.perfil
+                                        ");
+                                    
     ?>
 </head>
 
@@ -42,10 +49,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="col-sm-6">
-                    <a type="button" data-toggle="modal" data-target="#modal_user" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
+                    <a type="button" data-toggle="modal" data-target="#modal_cadastro" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
                 </div>
                 <!-- Modal Cadastro -->
-                <div class="modal fade" id="modal_user" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal fade" id="modal_cadastro" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -77,9 +84,11 @@
                                         <div class="col">
                                             <label for="perfil">Perfil:</label>
                                             <select class="form-control" name="perfil">
-                                                <option>ADM</option>
-                                                <option>Guest</option>
-                                                <option>Usuário</option>
+                                                <?php
+                                                foreach ($perfils as $perfil) {
+                                                    echo '<option value="' . $perfil['id'] . '">' . $perfil['nome'] . '</option>';
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                         <div class="col">
@@ -120,25 +129,54 @@
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($dados as $valor) {
+
+                        foreach ($usuarios as $usuario) {
                             echo '
                                 <tr>
-                                    <th scope="row">' . $valor['id'] . '</th>
-                                    <td>' . $valor['nome'] . '</td> 
-                                    <td>' . $valor['perfil'] . '</td>
-                                    <td>' . $valor['login'] . '</td>
+                                    <th scope="row">' . $usuario['id'] . '</th>
+                                    <td>' . $usuario['nome'] . '</td> 
+                                    <td>' . $usuario['login'] . '</td>
+                                    <td>' . $usuario['perfil_nome'] . '</td>
                                     <td width=150px>
-                                         <a href="cadastro_edit.php?id=$id" class="btn btn-success btn-sm">Editar</a>
-                                         <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirma" onclick ="pegar_dados(' . $valor['id'] . ', ' . $valor['nome'] . ')">Excluir</a>
+                                         <a href="#" class="btn btn-success btn-sm">Editar</a>
+                                         <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal_excluir" onclick ="pegar_dados(' . $usuario['id'] . ', ' . $usuario['nome'] . ')">Excluir</a>
                                      </td>
                                 </tr>';
                         }
+
                         ?>
+
+                        <div class="modal fade" id="modal_excluir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmação de exclusão</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="excluir_usuarios.php" method="POST">
+                                        <div class="modal-body">
+                                            <?php echo '<p>Deseja realmente excluir <b id="nome_pessoa">' . $usuarios['id'] . '</b></p>';
+                                            ?>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                                            <input type="hidden" name="excluir_usuario" id="excluir_usuario" value="">
+                                            <input type="hidden" name="nome" id="id" value="">
+                                            <input type="submit" class="btn btn-danger" value="Sim">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
 
     <!-- jQuery -->
     <script src="/jadminlte/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>

@@ -27,14 +27,14 @@
     <div class="content-wrapper px-4 py-2" style="min-height: 849px;">
 
         <?php
-        $id = $_POST['id'];
+        $id = $_POST['excluir_usuario'];
 
-        $sql = "DELETE FROM `usuarios` WHERE id = '$id'";
+        $excluir_usuario = "DELETE FROM `usuario` WHERE id = '$id'";
 
-        if (mysqli_query($conn, $sql)) {
-            mensagem("$nome excluído com sucesso!", 'success');
+        if (mysqli_query($conn, $excluir_usuario)) {
+            mensagem("$id excluído com sucesso!", 'success');
         } else {
-            mensagem("$nome NÃO excluído!", 'danger');
+            mensagem("$id NÃO excluído!", 'danger');
         }
         ?>
 

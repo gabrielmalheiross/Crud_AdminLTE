@@ -23,15 +23,16 @@
 </head>
 
 <body>
-    <?php include "../modelo.php"; ?>
+    <?php include "../template.php"; ?>
     <div class="content-wrapper px-4 py-2" style="min-height: 849px;">
         <?php
 
         $nome = $_POST['nome'];
         $login = $_POST['login'];
         $senha = md5($_POST['senha']);
+        $perfil = $_POST['perfil'];
 
-        $sql = "INSERT INTO `usuario`(`nome`, `login`, `senha`) VALUES ('$nome','$login','$senha')";
+        $sql = "INSERT INTO `usuario`(`nome`, `login`, `senha`, `perfil`) VALUES ('$nome','$login','$senha', '$perfil')";
 
         if (mysqli_query($conn, $sql)) {
             mensagem("$nome cadastrado com sucesso!", 'success');

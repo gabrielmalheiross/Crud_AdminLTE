@@ -21,6 +21,5 @@ function mensagem($texto, $tipo)
 	function pegar_dados(id, nome) {
 		document.getElementById('nome_pessoa').innerHTML = nome;
 		document.getElementById('id_pessoa').value = id;
-		document.getElementById('nome_pessoa1').value = nome;
 	}
 </script>
