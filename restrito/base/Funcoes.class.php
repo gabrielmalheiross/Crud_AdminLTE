@@ -19,7 +19,8 @@ function mensagem($texto, $tipo)
 
 <script>
 	function pegar_dados(id, nome) {
-		document.getElementById('nome_pessoa').innerHTML = nome;
-		document.getElementById('id_pessoa').value = id;
-	}
+            document.getElementById('nome_excluir').innerHTML = nome;
+            document.getElementById('id_excluir').value = id;
+            document.getElementById('nome_excluir1').value = nome;
+        }
 </script>

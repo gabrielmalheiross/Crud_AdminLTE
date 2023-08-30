@@ -155,13 +155,13 @@
                                     </div>
                                     <form action="excluir_usuarios.php" method="POST">
                                         <div class="modal-body">
-                                            <?php echo '<p>Deseja realmente excluir <b id="nome_pessoa">' . $usuarios['id'] . '</b></p>';
+                                            <?php echo '<p>Deseja realmente excluir <b id="nome_excluir">' . $usuarios['id'] . '</b></p>';
                                             ?>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
-                                            <input type="hidden" name="excluir_usuario" id="excluir_usuario" value="">
-                                            <input type="hidden" name="nome" id="id" value="">
+                                            <input type="hidden" name="id" id="id_usuario" value="">
+                                            <input type="hidden" name="nome" id="nome_excluir1" value="">
                                             <input type="submit" class="btn btn-danger" value="Sim">
                                         </div>
                                     </form>
