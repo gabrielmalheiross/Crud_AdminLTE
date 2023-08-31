@@ -35,13 +35,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/jadminlte/restrito/usuarios/usuarios.php" class="nav-link">
+                                    <a href="/jadminlte/usuarios.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Usuários</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/jadminlte/restrito/perfil/perfil.php" class="nav-link">
+                                    <a href="/jadminlte/perfil.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Perfil</p>
                                     </a>
@@ -61,7 +61,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="/jadminlte/restrito/pesquisa/pesquisa.php" class="nav-link">
+                            <a href="/jadminlte/pesquisa.php" class="nav-link">
                                 <i class="fas fa-search fa-fw"></i>
                                 <p>Pesquisa</p>
                             </a>
@@ -89,7 +89,7 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/jadminlte/restrito/index.php" class="nav-link">Home</a>
+            <a href="/jadminlte/principal.php" class="nav-link">Home</a>
         </li>
 
     </ul>
@@ -101,13 +101,13 @@
         
         <li class="nav-item dropdown">
             <?php
-            echo '<a style="color: white; margin: 10px">'.$_SESSION['login'].'</a>';
+            echo '<a style="color: white; margin: 10px">'.$_SESSION['loginUser'].'</a>';
             ?>
         </li>
         <li class="nav-item dropdown">
             <?php
             // echo '<a class="btn btn-danger" href="/jadminlte/restrito/logout.php">Sair</a>';
-            echo '<a class="btn btn-danger" href="/jadminlte/restrito/logout.php?token=' . md5(session_id()) . '">Sair</a>';
+            echo '<a class="btn btn-danger" href="/jadminlte/logout.php?token=' . md5(session_id()) . '">Sair</a>';
             ?>
 
             <!-- <a href="/jadminlte/restrito/logout.php" class="btn btn-danger" data-toggle="dropdown">

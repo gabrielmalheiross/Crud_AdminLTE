@@ -15,11 +15,9 @@
     <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/dist/css/adminlte.min.css">
 
     <?php
-    include "../conexao.php";
-    include "../base/DB.class.php";
-    include "../base/Funcoes.class.php";
-    include "../../validar.php";
-
+    include "./base/DB.class.php";
+    include "./base/Funcoes.class.php";
+    include "./conexao/validar.php";
 
     $database = new DB();
 
@@ -29,7 +27,7 @@
 </head>
 
 <body>
-    <?php include "../template.php"; ?>
+    <?php include "./template/template.php"; ?>
 
     <div class="content-wrapper px-4 py-2" style="min-height: 849px;">
         <div class="row mb-2">

@@ -7,6 +7,6 @@ if(isset($_GET['token']) && $_GET['token'] === $token) {
    exit();
 } 
 else {
-   echo '<a href="doLogout.php?token='.$token.'>Confirmar logout</a>';
+   echo '<a href="logout.php?token='.$token.'>Confirmar logout</a>';
 }
 ?>

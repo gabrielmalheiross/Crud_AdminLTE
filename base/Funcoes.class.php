@@ -14,6 +14,14 @@ function mensagem($texto, $tipo)
             </div>";
 }
 
+function validaUsuario(){
+	if(!$_SESSION['idUser']){
+		echo '
+		<script>
+		window.location.href = "sair.php?error=3";
+		</script>';
+	}
+}
 
 ?>
 
