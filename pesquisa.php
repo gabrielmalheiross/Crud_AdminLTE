@@ -1,7 +1,10 @@
 <?php
 include "./base/DB.class.php";
 include "./conexao/validar.php";
-session_start();
+// session_start();
+
+$database = new DB();
+
 ?>
 
 <!DOCTYPE html>

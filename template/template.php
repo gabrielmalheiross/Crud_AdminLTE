@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/jadminlte/restrito/index.php" class="brand-link">
+    <a href="/jadminlte/principal.php" class="brand-link">
         <img src="https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg" class="brand-image img-circle elevation-2">
         <span class="brand-text font-weight-light"><b>Teste do Catinho</b></span>
     </a>
@@ -25,42 +25,67 @@
          with font-awesome or any other icon font library -->
                 <li class="nav-item menu-open">
                     <ul class="nav nav-treeview">
-                        <li class="nav-item menu-close">
-                            <a href="#" class="nav-link">
-                                <i class="fa fa-wrench nav-icon"></i>
-                                <p>
-                                    Sistema
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/jadminlte/usuarios.php" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Usuários</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/jadminlte/perfil.php" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Perfil</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Parâmetros</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Configurações</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
+                        <?php
+                        $idPerfilSessao = $_SESSION['idPerfilUser'];
+
+                        $menus = $database->get_results("SELECT 
+                                                            permissao.*
+                                                            ,menu.link as link
+                                                            ,menu.nome as menu_nome
+                                                            ,menu.id as menu_id
+                                                            FROM permissao
+                                                            LEFT JOIN menu on menu.id = permissao.id_menu
+                                                            WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai is null order by menu.ordem");
+
+                        foreach ($menus as $menu) {
+
+                            if ($menu['link']) {
+                                echo '<li class="nav-item">
+                                            <a href="/jadminlte/' . $menu['link'] . '" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>' . $menu['menu_nome'] . '</p>
+                                            </a>
+                                        </li>';
+                            } else {
+
+                                $menusFilhos = $database->get_results("SELECT 
+                                                        permissao.*
+                                                        ,menu.link as link
+                                                        ,menu.nome as menu_nome
+                                                        FROM permissao
+                                                        LEFT JOIN menu on menu.id = permissao.id_menu
+                                                        WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai=" . $menu['menu_id'] . " order by menu.ordem");
+
+                                echo '
+                                        <li class="nav-item menu-close">
+                                            <a href="#" class="nav-link">
+                                                <i class="fa fa-wrench nav-icon"></i>
+                                                    <p>
+                                                        ' . $menu['menu_nome'] . '
+                                                        <i class="right fas fa-angle-left"></i>
+                                                    </p>
+                                            </a>
+                                        <ul class="nav nav-treeview">
+                                                ';
+
+
+                                foreach ($menusFilhos as $menuFilho) {
+                                    echo '  <li class="nav-item">
+                                                <a href="/jadminlte/' . $menuFilho['link'] . '" class="nav-link">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>' . $menuFilho['menu_nome'] . '</p>
+                                                </a>
+                                            </li>';
+                                }
+
+                                echo '
+                                                </ul>
+                                            </li>
+                                        ';
+                            }
+                        }
+                        ?>
+                        <!-- <li class="nav-item">
                             <a href="/jadminlte/pesquisa.php" class="nav-link">
                                 <i class="fas fa-search fa-fw"></i>
                                 <p>Pesquisa</p>
@@ -71,7 +96,7 @@
                                 <i class="fas fa-chart-pie nav-icon"></i>
                                 <p>Gráficos</p>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </li>
 
@@ -93,15 +118,15 @@
         </li>
 
     </ul>
-    
+
 
 
     <ul class="navbar-nav ml-auto">
         <!-- Messages Dropdown Menu -->
-        
+
         <li class="nav-item dropdown">
             <?php
-            echo '<a style="color: white; margin: 10px">'.$_SESSION['loginUser'].'</a>';
+            echo '<a style="color: white; margin: 10px">' . $_SESSION['loginUser'] . '</a>';
             ?>
         </li>
         <li class="nav-item dropdown">

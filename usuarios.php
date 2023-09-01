@@ -21,9 +21,10 @@
     include "./base/DB.class.php";
     include "./base/Funcoes.class.php";
     include "./conexao/validar.php";
-    session_start();
 
-    @$acao = $_GET['acao'];
+    // session_start();
+
+    $acao = isset($_GET['acao']) ?? $_GET['acao'];
 
     $database = new DB();
 
@@ -53,13 +54,13 @@
         <!-- BOTÃO CADASTRO -->
             <div class="card-header">
                 <div class="col-sm-6">
-                    <a href="./usuarios.php?acao=form" type="button" data-toggle="modal" data-target="#modal_cadastro" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
+                    <a type="button" data-toggle="modal" data-target="#modal_cadastro" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
                 </div>
 
                 <!-- MODAL CADASTRO -->
-                <div class="modal fade" id="modal_cadastro" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal fade show" id="modal_cadastro" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <?php
-                            if ($acao == 'form') {
+                            // if ($acao == 'form') {
         
                             ?>
                         <div class="modal-dialog">
@@ -72,7 +73,7 @@
                                 </div>
 
                                 <div class="modal-body">
-                                    <form action="./cadastro_usuarios.php" method="POST" enctype="multipart/form-data">
+                                    <form action="./modules/usuarios/cadastro_usuarios.php" method="POST" enctype="multipart/form-data">
                                         <div class="row">
                                             <div class="col">
                                                 <label for="nome">Nome:</label>
@@ -121,8 +122,7 @@
 
 
         <?php
-                    }
-
+                    // }
 
         ?>
 

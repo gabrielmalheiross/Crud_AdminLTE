@@ -1,9 +1,11 @@
     <?php
     include "./base/DB.class.php";
-    // include "./conexao/validar.php";
+    include "./conexao/validar.php";
     include "./base/Funcoes.class.php";
 
-    session_start();
+    $database = new DB();
+
+    // session_start();
     // validaUsuario();
     ?>
     
@@ -34,9 +36,12 @@
         <?php include "./template/template.php"; ?>
 
         <div class="content-wrapper px-4 py-2" style="min-height: 849px;">
-
+            <?php
+                echo '<h1>Tela Principal</h1>';
+            ?>
         </div>
     </body>
+
 
     <!-- jQuery -->
     <script src="/jadminlte/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>

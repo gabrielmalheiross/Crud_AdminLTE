@@ -31,11 +31,18 @@ $database = new DB();
             $senha = md5(addslashes($_POST['senha']));
 
             $validaUsuario = $database->get_results("SELECT 
-                                                        u.*
-                                                        ,p.nome as nome_perfil
-                                                        FROM usuario u 
-                                                        LEFT JOIN perfil p ON p.id = u.perfil
-                                                        WHERE u.login = '$login' AND u.senha = '$senha'
+                                                        usuario.id as id 
+                                                        ,usuario.nome as nome 
+                                                        ,usuario.login as login
+                                                        ,usuario.perfil as perfil
+                                                        ,perfil.nome as nome_perfil
+                                                        ,menu.link as link
+                                                        ,permissao.id as id_permissao
+                                                        FROM menu
+                                                        LEFT JOIN permissao ON menu.id = permissao.id_menu
+                                                        LEFT JOIN perfil ON permissao.id_menu = perfil.id
+                                                        LEFT JOIN usuario ON perfil.id = usuario.perfil
+                                                        WHERE usuario.login = '$login' AND usuario.senha = '$senha'
                                                 ");
 
             // printR($validaUsuario);
@@ -49,16 +56,23 @@ $database = new DB();
                 $_SESSION['loginUser'] = $validaUsuario[0]['login'];
                 $_SESSION['idPerfilUser'] = $validaUsuario[0]['perfil'];
                 $_SESSION['nomePerfilUser'] = $validaUsuario[0]['nome_perfil'];
+                $_SESSION['idPermissao'] = $validaUsuario[0]['id_permissao'];
+                $_SESSION['menuLinkUser'] = $validaUsuario[0]['link'];
 
+                // printR($_SESSION['idPermissao']);
+               
                 echo '
                     <script>
                     window.location.href = "principal.php";
                     </script>';
+
+                // header('location: principal.php');
             } else {
                 echo '
-        <script>
-        window.location.href = "index.php?error=2";
-        </script>';
+                    <script>
+                    window.location.href = "index.php?error=2";
+                    </script>';
+                // header('location: /jadminlte/index.php?error=2');
             }
         } else {
         ?>
@@ -70,17 +84,17 @@ $database = new DB();
             <?php
             if (@$_GET['error'] == 2) {
                 echo '
-            <div class="alert alert-danger" role="alert">
-                Usuário ou senha invalido.
-            </div>';
+                    <div class="alert alert-danger" role="alert">
+                        Usuário ou senha invalido.
+                    </div>';
             }
 
 
             if (@$_GET['error'] == 3) {
                 echo '
-            <div class="alert alert-warning" role="alert">
-                Usuário sem permissão.
-            </div>';
+                    <div class="alert alert-warning" role="alert">
+                        Usuário sem permissão.
+                    </div>';
             }
             ?>
 
