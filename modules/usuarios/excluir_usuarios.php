@@ -15,23 +15,27 @@
     <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/dist/css/adminlte.min.css">
 
     <?php
-    include "../conexao.php";
-    include "../base/Funcoes.class.php";
-    include "../../validar.php";
+    // include "../conexao.php";
+    include "../../base/DB.class.php";
+    include "../../base/Funcoes.class.php";
+    include "../../conexao/validar.php";
 
+    $database = new DB();
     ?>
 </head>
 
 <body>
-    <?php include "../template.php"; ?>
+    <?php include "../../template/template.php"; ?>
     <div class="content-wrapper px-4 py-2" style="min-height: 849px;">
 
         <?php
+        printR($connection);
         $id = $_POST['excluir_usuario'];
+        $conn = $_SESSION['idUser'];
 
         $excluir_usuario = "DELETE FROM `usuario` WHERE id = '$id'";
 
-        if (mysqli_query($conn, $excluir_usuario)) {
+        if (mysqli_query($connection, $excluir_usuario)) {
             mensagem("$id excluído com sucesso!", 'success');
         } else {
             mensagem("$id NÃO excluído!", 'danger');

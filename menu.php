@@ -6,8 +6,6 @@ include "./conexao/validar.php";
 
 $database = new DB();
 
-$menus = $database->get_results("SELECT *
-                                        FROM menu");
 
 ?>
 
@@ -100,6 +98,11 @@ $menus = $database->get_results("SELECT *
                     </thead>
                     <tbody>
                         <?php
+                        
+                        $menus = $database->get_results("SELECT *
+                                                                FROM menu");
+
+                        // printR($menus);
                         foreach ($menus as $menu) {
                             echo '
                                 <tr>

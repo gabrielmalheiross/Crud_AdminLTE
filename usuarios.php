@@ -30,12 +30,7 @@
 
     $perfils = $database->get_results("SELECT p.* FROM perfil p ");
 
-    $usuarios = $database->get_results("SELECT a.*
-                                                ,p.nome as perfil_nome
-                                                ,p.id as perfil_id
-                                                FROM usuario a 
-                                                LEFT JOIN perfil p on p.id = a.perfil
-                                                ");
+
 
     ?>
 </head>
@@ -52,84 +47,84 @@
 
 
         <!-- BOTÃO CADASTRO -->
-            <div class="card-header">
-                <div class="col-sm-6">
-                    <a type="button" data-toggle="modal" data-target="#modal_cadastro" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
-                </div>
+        <div class="card-header">
+            <div class="col-sm-6">
+                <a type="button" data-toggle="modal" data-target="#modal_cadastro" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
+            </div>
 
-                <!-- MODAL CADASTRO -->
-                <div class="modal fade show" id="modal_cadastro" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <?php
-                            // if ($acao == 'form') {
-        
-                            ?>
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="staticBackdropLabel">Cadastrar Usuário</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
+            <!-- MODAL CADASTRO -->
+            <div class="modal fade show" id="modal_cadastro" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <?php
+                // if ($acao == 'form') {
 
-                                <div class="modal-body">
-                                    <form action="./modules/usuarios/cadastro_usuarios.php" method="POST" enctype="multipart/form-data">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="nome">Nome:</label>
-                                                <input type="nome" class="form-control" name="nome" placeholder="Digite...">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="login">Login:</label>
-                                                <input type="login" class="form-control" name="login" placeholder="Digite...">
-                                            </div>
-                                            <div class="col">
-                                                <label for="senha">Senha:</label>
-                                                <input type="password" class="form-control" name="senha" placeholder="Digite...">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="perfil">Perfil:</label>
-                                                <select class="form-control" name="perfil">
-                                                    <?php
-                                                    foreach ($perfils as $perfil) {
-                                                        echo '<option value="' . $perfil['id'] . '">' . $perfil['nome'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <label for="status">Status:</label>
-                                                <select class="form-control" name="status">
-                                                    <option>Ativo</option>
-                                                    <option>Inativo</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
-                                            <button type="submit" class="btn btn-primary">Salvar</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                ?>
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Cadastrar Usuário</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
 
+                        <div class="modal-body">
+                            <form action="./modules/usuarios/cadastro_usuarios.php" method="POST" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="nome">Nome:</label>
+                                        <input type="nome" class="form-control" name="nome" placeholder="Digite...">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="login">Login:</label>
+                                        <input type="login" class="form-control" name="login" placeholder="Digite...">
+                                    </div>
+                                    <div class="col">
+                                        <label for="senha">Senha:</label>
+                                        <input type="password" class="form-control" name="senha" placeholder="Digite...">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="perfil">Perfil:</label>
+                                        <select class="form-control" name="perfil">
+                                            <?php
+                                            foreach ($perfils as $perfil) {
+                                                echo '<option value="' . $perfil['id'] . '">' . $perfil['nome'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="status">Status:</label>
+                                        <select class="form-control" name="status">
+                                            <option>Ativo</option>
+                                            <option>Inativo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-
-        <?php
-                    // }
-
-        ?>
-
-                <div class="card-tools">
-                    <span class="badge badge-primary"></span>
-                </div>
             </div>
+
+
+            <?php
+            // }
+
+            ?>
+
+            <div class="card-tools">
+                <span class="badge badge-primary"></span>
+            </div>
+        </div>
 
 
         <div class="card">
@@ -147,6 +142,12 @@
                     <tbody>
 
                         <?php
+                        $usuarios = $database->get_results("SELECT u.*
+                                                                    ,p.nome as perfil_nome
+                                                                    ,p.id as perfil_id
+                                                                    FROM usuario u 
+                                                                    LEFT JOIN perfil p on p.id = u.perfil
+                                                                    ");
 
                         foreach ($usuarios as $usuario) {
                             echo '
@@ -171,9 +172,9 @@
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmação de exclusão</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form action="excluir_usuarios.php" method="POST">
+                                    <form action="./modules/usuarios/excluir_usuarios.php" method="POST">
                                         <div class="modal-body">
-                                            <?php echo '<p>Deseja realmente excluir <b id="nome_excluir">' . $usuarios['id'] . '</b></p>';
+                                            <?php echo '<p>Deseja realmente excluir <b id="nome_excluir">' . $usuario['nome'] . '</b></p>';
                                             ?>
                                         </div>
                                         <div class="modal-footer">
@@ -186,10 +187,10 @@
                                 </div>
                             </div>
                         </div>
-                    <?php
-                   
+                        <?php
 
-                    ?>
+
+                        ?>
                     </tbody>
                 </table>
             </div>

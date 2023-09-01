@@ -8,3 +8,4 @@ if (isset($_SESSION['loginUser']) && isset($_SESSION['idPerfilUser'])) {
     header("location: /jadminlte/index.php?sem-autorizacao");
     die();
 }
+?>

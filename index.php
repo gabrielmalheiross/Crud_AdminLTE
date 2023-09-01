@@ -82,7 +82,7 @@ $database = new DB();
             </div>
 
             <?php
-            if (@$_GET['error'] == 2) {
+            if ($_GET['error'] == 2) {
                 echo '
                     <div class="alert alert-danger" role="alert">
                         Usuário ou senha invalido.
@@ -90,7 +90,7 @@ $database = new DB();
             }
 
 
-            if (@$_GET['error'] == 3) {
+            if ($_GET['error'] == 3) {
                 echo '
                     <div class="alert alert-warning" role="alert">
                         Usuário sem permissão.

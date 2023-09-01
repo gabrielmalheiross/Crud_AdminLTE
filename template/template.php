@@ -28,7 +28,7 @@
                         <?php
                         $idPerfilSessao = $_SESSION['idPerfilUser'];
 
-                        $menus = $database->get_results("SELECT 
+                        $menusTemplate = $database->get_results("SELECT 
                                                             permissao.*
                                                             ,menu.link as link
                                                             ,menu.nome as menu_nome
@@ -37,13 +37,13 @@
                                                             LEFT JOIN menu on menu.id = permissao.id_menu
                                                             WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai is null order by menu.ordem");
 
-                        foreach ($menus as $menu) {
+                        foreach ($menusTemplate as $menuTemplate) {
 
-                            if ($menu['link']) {
+                            if ($menuTemplate['link']) {
                                 echo '<li class="nav-item">
-                                            <a href="/jadminlte/' . $menu['link'] . '" class="nav-link">
+                                            <a href="/jadminlte/' . $menuTemplate['link'] . '" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
-                                                <p>' . $menu['menu_nome'] . '</p>
+                                                <p>' . $menuTemplate['menu_nome'] . '</p>
                                             </a>
                                         </li>';
                             } else {
@@ -54,14 +54,14 @@
                                                         ,menu.nome as menu_nome
                                                         FROM permissao
                                                         LEFT JOIN menu on menu.id = permissao.id_menu
-                                                        WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai=" . $menu['menu_id'] . " order by menu.ordem");
+                                                        WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai=" . $menuTemplate['menu_id'] . " order by menu.ordem");
 
                                 echo '
                                         <li class="nav-item menu-close">
                                             <a href="#" class="nav-link">
                                                 <i class="fa fa-wrench nav-icon"></i>
                                                     <p>
-                                                        ' . $menu['menu_nome'] . '
+                                                        ' . $menuTemplate['menu_nome'] . '
                                                         <i class="right fas fa-angle-left"></i>
                                                     </p>
                                             </a>
