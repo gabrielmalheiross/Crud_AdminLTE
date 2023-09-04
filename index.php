@@ -82,20 +82,20 @@ $database = new DB();
             </div>
 
             <?php
-            if ($_GET['error'] == 2) {
-                echo '
-                    <div class="alert alert-danger" role="alert">
-                        Usuário ou senha invalido.
-                    </div>';
-            }
+            // if ($_GET['error'] == 2) {
+            //     echo '
+            //         <div class="alert alert-danger" role="alert">
+            //             Usuário ou senha invalido.
+            //         </div>';
+            // }
 
 
-            if ($_GET['error'] == 3) {
-                echo '
-                    <div class="alert alert-warning" role="alert">
-                        Usuário sem permissão.
-                    </div>';
-            }
+            // if ($_GET['error'] == 3) {
+            //     echo '
+            //         <div class="alert alert-warning" role="alert">
+            //             Usuário sem permissão.
+            //         </div>';
+            // }
             ?>
 
             <!-- /.login-logo -->

@@ -5,7 +5,7 @@ if (isset($_SESSION['loginUser']) && isset($_SESSION['idPerfilUser'])) {
     $login = $_SESSION['loginUser'];
 } else {
     session_destroy();
-    header("location: /jadminlte/index.php?sem-autorizacao");
+    header("location: /jadminlte/principal.php?sem-autorizacao");
     die();
 }
 ?>
