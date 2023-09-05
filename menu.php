@@ -6,6 +6,7 @@ include "./conexao/validar.php";
 
 $database = new DB();
 
+if (in_array($_SESSION['menuLinkUser'],['4'])) {
 
 ?>
 
@@ -114,6 +115,10 @@ $database = new DB();
                                      </td>
                                 </tr>';
                         }
+
+                    } else {
+                        header("location: /jadminlte/principal.php?msg=sem-autorização");
+                    }
                         ?>
                     </tbody>
                 </table>

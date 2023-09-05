@@ -26,6 +26,18 @@
     <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/dist/css/adminlte.min.css">
     <title>Tela Inicial</title>
 
+
+    <?php
+        $msg = isset($_GET['msg']) ? $_GET['msg'] : null;
+
+        if ($msg == 'sem-autorização') {
+            echo '
+            <script>
+            window.alert("Usuário sem autorização!");
+            </script>
+            ';
+        }
+    ?>
 </head>
 
 <body>
@@ -38,6 +50,7 @@
         <div class="content-wrapper px-4 py-2" style="min-height: 849px;">
             <?php
                 echo '<h1>Tela Principal</h1>';
+                printR($_SESSION);
             ?>
         </div>
     </body>

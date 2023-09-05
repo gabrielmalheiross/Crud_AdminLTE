@@ -3,6 +3,8 @@ include "./base/DB.class.php";
 include "./base/Funcoes.class.php";
 
 $database = new DB();
+
+$error = isset($_GET['error']) ? $_GET['error'] : null;
 ?>
 
 
@@ -36,14 +38,14 @@ $database = new DB();
                                                         ,usuario.login as login
                                                         ,usuario.perfil as perfil
                                                         ,perfil.nome as nome_perfil
-                                                        ,menu.link as link
+                                                        ,menu.id as id_menu
                                                         ,permissao.id as id_permissao
                                                         FROM menu
                                                         LEFT JOIN permissao ON menu.id = permissao.id_menu
                                                         LEFT JOIN perfil ON permissao.id_menu = perfil.id
                                                         LEFT JOIN usuario ON perfil.id = usuario.perfil
                                                         WHERE usuario.login = '$login' AND usuario.senha = '$senha'
-                                                ");
+                                                    ");
 
             // printR($validaUsuario);
 
@@ -57,10 +59,10 @@ $database = new DB();
                 $_SESSION['idPerfilUser'] = $validaUsuario[0]['perfil'];
                 $_SESSION['nomePerfilUser'] = $validaUsuario[0]['nome_perfil'];
                 $_SESSION['idPermissao'] = $validaUsuario[0]['id_permissao'];
-                $_SESSION['menuLinkUser'] = $validaUsuario[0]['link'];
+                $_SESSION['menuLinkUser'] = $validaUsuario['id_menu'];
 
                 // printR($_SESSION['idPermissao']);
-               
+
                 echo '
                     <script>
                     window.location.href = "principal.php";
@@ -82,20 +84,20 @@ $database = new DB();
             </div>
 
             <?php
-            // if ($_GET['error'] == 2) {
-            //     echo '
-            //         <div class="alert alert-danger" role="alert">
-            //             Usuário ou senha invalido.
-            //         </div>';
-            // }
+            if ($error == 2) {
+                echo '
+                    <div class="alert alert-danger" role="alert">
+                        Usuário ou senha invalido.
+                    </div>';
+            }
 
 
-            // if ($_GET['error'] == 3) {
-            //     echo '
-            //         <div class="alert alert-warning" role="alert">
-            //             Usuário sem permissão.
-            //         </div>';
-            // }
+            if ($error == 3) {
+                echo '
+                    <div class="alert alert-warning" role="alert">
+                        Usuário sem permissão.
+                    </div>';
+            }
             ?>
 
             <!-- /.login-logo -->
