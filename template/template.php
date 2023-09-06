@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="height: auto;">
     <!-- Brand Logo -->
     <a href="/jadminlte/principal.php" class="brand-link">
         <img src="https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_1280.jpg" class="brand-image img-circle elevation-2">

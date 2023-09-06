@@ -122,7 +122,6 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                 ?>
 
                     <div class="card">
-
                         <div class="form-group" style="margin: 15px">
                             <form action="./usuarios.php?acao=save" method="POST" enctype="multipart/form-data">
                                 <div class="row">
@@ -155,8 +154,6 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                         <select class="form-control" name="perfil" required>
                                             <option value="">Selecione</option>
                                             <?php
-
-
                                             foreach ($perfils as $perfil) {
                                                 echo '<option value="' . $perfil['id'] . '">' . $perfil['nome'] . '</option>';
                                             }
@@ -175,8 +172,6 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
                 <?php
 
-
-
             }
 
 
@@ -184,11 +179,12 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
 
                 $getId = $_GET['id'];
-                $getUsuario = $database->get_results("SELECT u.id as id
+                $getUsuario = $database->get_results("SELECT 
+                                                        u.id as id
                                                         ,u.nome as get_nome
                                                         FROM usuario u 
                                                         WHERE id = $getId
-                                                        ");
+                                                    ");
                 // printR($_GET['id']);
                 ?>
 
