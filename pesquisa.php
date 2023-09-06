@@ -7,7 +7,7 @@ $database = new DB();
 
 $permissaoUsuarioMenuId = 1;
 
-if (in_array($_SESSION['permissoesMenus'] , [ $permissaoUsuarioMenuId ])) {
+if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
 ?>
 

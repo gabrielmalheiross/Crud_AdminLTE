@@ -51,7 +51,6 @@
             <?php
                 echo '<h1>Tela Principal</h1>';
                 printR($_SESSION);
-                printR($menusTemplate);
             ?>
         </div>
     </body>

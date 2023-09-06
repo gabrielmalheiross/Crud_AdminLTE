@@ -49,12 +49,12 @@
                             } else {
 
                                 $menusFilhos = $database->get_results("SELECT 
-                                                        permissao.*
-                                                        ,menu.link as link
-                                                        ,menu.nome as menu_nome
-                                                        FROM permissao
-                                                        LEFT JOIN menu on menu.id = permissao.id_menu
-                                                        WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai=" . $menuTemplate['menu_id'] . " order by menu.ordem");
+                                                                            permissao.*
+                                                                            ,menu.link as link
+                                                                            ,menu.nome as menu_nome
+                                                                            FROM permissao
+                                                                            LEFT JOIN menu on menu.id = permissao.id_menu
+                                                                            WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai=" . $menuTemplate['menu_id'] . " order by menu.ordem");
 
                                 echo '
                                         <li class="nav-item menu-close">

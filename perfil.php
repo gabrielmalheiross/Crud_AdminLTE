@@ -12,8 +12,8 @@
     $getID = isset($_GET['id']) ? $_GET['id'] : null;
 
     $permissaoUsuarioMenuId = 2;
-    
-    if (in_array($_SESSION['permissoesMenus'] , [ $permissaoUsuarioMenuId ])) {
+
+    if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
     ?>
 
@@ -175,8 +175,8 @@
 
                     if ($acao == 'save') {
                         $salvar = [
-                            'nome' => $_POST['nome']
-                        ];
+                                'nome' => $_POST['nome']
+                                ];
                         if (isset($_POST['id'])) {
                             #################
                             ##EDIÇÃO/UPDATE##

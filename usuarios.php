@@ -6,10 +6,8 @@ include "./conexao/validar.php";
 $permissaoUsuarioMenuId = 3;
 
 
-var_dump($_SESSION);
 
-if (in_array($_SESSION['permissoesMenus'] , [ $permissaoUsuarioMenuId ])) {
-
+if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
 ?>
 
@@ -92,16 +90,16 @@ if (in_array($_SESSION['permissoesMenus'] , [ $permissaoUsuarioMenuId ])) {
 
                                     foreach ($usuarios as $usuario) {
                                         echo '
-                                <tr>
-                                    <th scope="row">' . $usuario['id'] . '</th>
-                                    <td>' . $usuario['nome'] . '</td> 
-                                    <td>' . $usuario['login'] . '</td>
-                                    <td>' . $usuario['perfil_nome'] . '</td>
-                                    <td width=150px>
-                                        <a href="./usuarios.php?acao=form&id=' . $usuario['id'] . '" class="btn btn-success btn-sm">Editar</a>
-                                        <a href="./usuarios.php?acao=delete&id=' . $usuario['id'] . '" class="btn btn-danger btn-sm"">Excluir</a>
-                                     </td>
-                                </tr>';
+                                            <tr>
+                                                <th scope="row">' . $usuario['id'] . '</th>
+                                                <td>' . $usuario['nome'] . '</td> 
+                                                <td>' . $usuario['login'] . '</td>
+                                                <td>' . $usuario['perfil_nome'] . '</td>
+                                                <td width=150px>
+                                                    <a href="./usuarios.php?acao=form&id=' . $usuario['id'] . '" class="btn btn-success btn-sm">Editar</a>
+                                                    <a href="./usuarios.php?acao=delete&id=' . $usuario['id'] . '" class="btn btn-danger btn-sm"">Excluir</a>
+                                                </td>
+                                            </tr>';
                                     }
 
                                     ?>
