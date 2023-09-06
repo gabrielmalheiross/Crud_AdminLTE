@@ -5,7 +5,9 @@ include "./conexao/validar.php";
 
 $database = new DB();
 
-if (in_array($_SESSION['menuLinkUser'], ['1'])) {
+$permissaoUsuarioMenuId = 1;
+
+if (in_array($_SESSION['permissoesMenus'] , [ $permissaoUsuarioMenuId ])) {
 
 ?>
 

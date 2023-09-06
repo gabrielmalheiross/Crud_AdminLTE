@@ -26,7 +26,7 @@
                 <li class="nav-item menu-open">
                     <ul class="nav nav-treeview">
                         <?php
-                        $idPerfilSessao = $_SESSION['idPerfilUser'];
+                        $idPerfilSessao = $_SESSION['perfilID'];
 
                         $menusTemplate = $database->get_results("SELECT 
                                                             permissao.*

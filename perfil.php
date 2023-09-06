@@ -11,7 +11,9 @@
     $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
     $getID = isset($_GET['id']) ? $_GET['id'] : null;
 
-    if (in_array($_SESSION['menuLinkUser'],['2'])) {
+    $permissaoUsuarioMenuId = 2;
+    
+    if (in_array($_SESSION['permissoesMenus'] , [ $permissaoUsuarioMenuId ])) {
 
     ?>
 

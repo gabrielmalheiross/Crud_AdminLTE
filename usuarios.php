@@ -3,7 +3,12 @@ include "./base/DB.class.php";
 include "./base/Funcoes.class.php";
 include "./conexao/validar.php";
 
-if (in_array($_SESSION['menuLinkUser'],['3'])) {
+$permissaoUsuarioMenuId = 3;
+
+
+var_dump($_SESSION);
+
+if (in_array($_SESSION['permissoesMenus'] , [ $permissaoUsuarioMenuId ])) {
 
 
 ?>
