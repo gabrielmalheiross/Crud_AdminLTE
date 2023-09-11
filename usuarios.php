@@ -34,7 +34,7 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
         // session_start();
 
         $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
-        $getID = isset($_GET['id']) ? $_GET['id'] : null;
+        $getId = isset($_GET['id']) ? $_GET['id'] : null;
 
         $database = new DB();
 
@@ -112,13 +112,24 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
             }
 
             if ($acao == 'form') {
-                $edicao = $database->get_results("SELECT u.*
-                                                    ,p.id as id_perfil
-                                                    ,p.nome as nome_perfil
-                                                    FROM usuario u 
-                                                    LEFT JOIN perfil p on p.id = u.perfil 
-                                                    WHERE u.id = '$getID'");
-                // printR($edicao);
+
+                if ($getId) {
+                    # code...
+                
+                    $edicao = $database->get_results("SELECT u.*
+                                                        ,p.id as id_perfil
+                                                        ,p.nome as nome_perfil
+                                                        FROM usuario u 
+                                                        LEFT JOIN perfil p on p.id = u.perfil 
+                                                        WHERE u.id = '$getId'");
+
+
+                    // printR($edicao);
+                }else{
+                    $edicao[0]['id'] = null;
+                    $edicao[0]['nome'] = null;
+                    $edicao[0]['login'] = null;
+                }
                 ?>
 
                     <div class="card">
@@ -127,21 +138,15 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                 <div class="row">
                                     <div class="col-1">
                                         <label for="id">ID:</label>
-                                        <input type="text" class="form-control" name="id" disabled <?php if (isset($_GET['id'])) {
-                                                                                                        echo 'value="' . $edicao[0]['id'] . '"';
-                                                                                                    } ?>>
+                                        <input type="text" class="form-control" name="id" readonly value="<?php echo $edicao[0]['id']; ?>">
                                     </div>
                                     <div class="col">
                                         <label for="nome">Nome:</label>
-                                        <input type="text" class="form-control" name="nome" placeholder="Digite..." required <?php if (isset($_GET['id'])) {
-                                                                                                                                    echo 'value="' . $edicao[0]['nome'] . '"';
-                                                                                                                                } ?>>
+                                        <input type="text" class="form-control" name="nome" placeholder="Digite..." required value="<?php echo $edicao[0]['nome'];?>">
                                     </div>
                                     <div class="col-3">
                                         <label for="login">Login:</label>
-                                        <input type="text" class="form-control" name="login" placeholder="Digite..." required <?php if (isset($_GET['id'])) {
-                                                                                                                                    echo 'value="' . $edicao[0]['login'] . '"';
-                                                                                                                                } ?>>
+                                        <input type="text" class="form-control" name="login" placeholder="Digite..." required value="<?php echo $edicao[0]['login'];?>">
                                     </div>
                                     <div class="col-3">
                                         <label for="senha">Senha:</label>
@@ -178,7 +183,7 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
             if ($acao == 'delete') {
 
 
-                $getId = $_GET['id'];
+                // $getId = $_GET['id'];
                 $getUsuario = $database->get_results("SELECT 
                                                         u.id as id
                                                         ,u.nome as get_nome
@@ -221,28 +226,36 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                     }
                 }
 
+
+
+
+
+
+
                 if ($acao == 'save') {
+                    // printR($_POST);
+                    // exit;
                     $salvar = [
                         'nome' => $_POST['nome'],
                         'login' => $_POST['login'],
                         'senha' => md5($_POST['senha']),
                         'perfil' => $_POST['perfil']
                     ];
-                    if (isset($_POST['id'])) {
+                    if ($_POST['id']) {
                         #################
                         ##EDIÇÃO/UPDATE##
                         #################
                         $where = ['id' => $_POST['id']];
                         $update = $database->update('usuario', $salvar, $where, 1);
                         $idLast = $_POST['id'];
-                        printR($_POST['id']);
+                        // printR($_POST['id']);
                     } else {
                         ###################
                         ##CADASTRO/INSERT##
                         ###################
                         $insert = $database->insert('usuario', $salvar);
                         $idLast = $database->lastid();
-                        printR($salvar);
+                        // printR($salvar);
                         if ($insert) {
                             mensagem('Usuário cadastro com sucesso', 'success');
                         } else {

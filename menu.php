@@ -32,7 +32,7 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
         $database = new DB();
 
         $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
-        $getID = isset($_GET['id']) ? $_GET['id'] : null;
+        $getId = isset($_GET['id']) ? $_GET['id'] : null;
 
 
         ?>
@@ -90,9 +90,18 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                         }
 
                         if ($acao == 'form') {
-                            $edicao = $database->get_results("SELECT m.*
+                            if ($getId) {
+                            
+                                $edicao = $database->get_results("SELECT m.*
                                                                     FROM menu m 
-                                                                    WHERE m.id = '$getID'");
+                                                                    WHERE m.id = '$getId'");
+                                // printR($edicao);
+                            }else{
+                                $edicao[0]['id'] = null;
+                                $edicao[0]['nome'] = null;
+                                $edicao[0]['link'] = null;
+                            }
+                            
 
                             $menus_pai = $database->get_results("SELECT * 
                                                                     FROM menu
@@ -104,21 +113,15 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                         <div class="row">
                                             <div class="col-1">
                                                 <label for="id">ID:</label>
-                                                <input type="text" class="form-control" name="id" disabled <?php if (isset($_GET['id'])) {
-                                                                                                                echo 'value="' . $edicao[0]['id'] . '"';
-                                                                                                            } ?>>
+                                                <input type="text" class="form-control" name="id" readonly <?php echo $edicao[0]['id']; ?>>
                                             </div>
                                             <div class="col">
                                                 <label for="nome">Nome:</label>
-                                                <input type="text" class="form-control" name="nome" placeholder="Digite..." required <?php if (isset($_GET['id'])) {
-                                                                                                                                            echo 'value="' . $edicao[0]['nome'] . '"';
-                                                                                                                                        } ?>>
+                                                <input type="text" class="form-control" name="nome" placeholder="Digite..." required <?php echo $edicao[0]['nome']; ?>>
                                             </div>
                                             <div class="col-3">
                                                 <label for="link">Link:</label>
-                                                <input type="text" class="form-control" name="link" placeholder="Digite..." required <?php if (isset($_GET['id'])) {
-                                                                                                                                            echo 'value="' . $edicao[0]['link'] . '"';
-                                                                                                                                        } ?>>
+                                                <input type="text" class="form-control" name="link" placeholder="Digite..." required <?php echo $edicao[0]['link']; ?>>
                                             </div>
                                             <div class="col-3">
                                                 <label for="menu_pai">Menu-pai:</label>

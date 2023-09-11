@@ -9,7 +9,7 @@
     $perfis = $database->get_results("SELECT * FROM perfil");
 
     $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
-    $getID = isset($_GET['id']) ? $_GET['id'] : null;
+    $getId = isset($_GET['id']) ? $_GET['id'] : null;
 
     $permissaoUsuarioMenuId = 2;
 
@@ -73,9 +73,10 @@
                                 <tr>
                                     <th scope="row">' . $perfil['id'] . '</th>
                                     <td>' . $perfil['nome'] . '</td> 
-                                    <td width=150px>
+                                    <td width=300px>
                                         <a href="./perfil.php?acao=form&id=' . $perfil['id'] . '" class="btn btn-success btn-sm">Editar</a>
                                         <a href="./perfil.php?acao=delete&id=' . $perfil['id'] . '" class="btn btn-danger btn-sm"">Excluir</a>
+                                        <a href="./perfil.php?acao=formPermissoes&id=' . $perfil['id'] . '" class="btn btn-warning btn-sm"">Permissões</a>
                                      </td>
                                 </tr>';
                                         }
@@ -90,9 +91,17 @@
                 }
 
                 if ($acao == 'form') {
-                    $edicao = $database->get_results("SELECT *
+                    if ($getId) {
+
+                        $edicao = $database->get_results("SELECT *
                                                     FROM perfil p
-                                                    WHERE p.id = '$getID'");
+                                                    WHERE p.id = '$getId'");
+                        // printR($edicao);
+                    } else {
+                        $edicao[0]['id'] = null;
+                        $edicao[0]['nome'] = null;
+                    }
+
                     // printR($edicao);
                     ?>
 
@@ -102,15 +111,11 @@
                                     <div class="row">
                                         <div class="col-1">
                                             <label for="id">ID:</label>
-                                            <input type="text" class="form-control" name="id" disabled <?php if (isset($_GET['id'])) {
-                                                                                                            echo 'value="' . $edicao[0]['id'] . '"';
-                                                                                                        } ?>>
+                                            <input type="text" class="form-control" name="id" readonly <?php echo $edicao[0]['id']; ?>>
                                         </div>
                                         <div class="col-3">
                                             <label for="nome">Nome:</label>
-                                            <input type="text" class="form-control" name="nome" placeholder="Digite..." required <?php if (isset($_GET['id'])) {
-                                                                                                                                        echo 'value="' . $edicao[0]['nome'] . '"';
-                                                                                                                                    } ?>>
+                                            <input type="text" class="form-control" name="nome" placeholder="Digite..." required <?php echo $edicao[0]['nome']; ?>>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-top: 10px;">
@@ -123,20 +128,48 @@
 
                     <?php
 
+                }
 
-
+                if ($acao == 'save') {
+                    $salvar = [
+                        'nome' => $_POST['nome']
+                    ];
+                    if (isset($_POST['id'])) {
+                        #################
+                        ##EDIÇÃO/UPDATE##
+                        #################
+                        $where = ['id' => $_POST['id']];
+                        $update = $database->update('perfil', $salvar, $where, 1);
+                        $idLast = $_POST['id'];
+                        // printR($_POST['id']);
+                    } else {
+                        ###################
+                        ##CADASTRO/INSERT##
+                        ###################
+                        $insert = $database->insert('perfil', $salvar);
+                        $idLast = $database->lastid();
+                        // printR($salvar);
+                        if ($insert) {
+                            mensagem('Usuário cadastro com sucesso', 'success');
+                        } else {
+                            mensagem('Não foi possível cadastrar o usuário', 'danger');
+                        }
+                    }
+                    ?>
+                        <a href="./perfil.php" type="button" class="btn btn-danger" data-dismiss="modal">Fechar</a>
+                    <?php
                 }
 
 
                 if ($acao == 'delete') {
 
 
-                    $getId = $_GET['id'];
+                    // $getId = $_GET['id'];
                     $getPerfil = $database->get_results("SELECT p.id as id
-                                                            ,p.nome as get_nome
-                                                            FROM Perfil p 
-                                                            WHERE id = $getId
-                                                            ");
+                                                                ,p.nome as get_nome
+                                                                FROM Perfil p 
+                                                                WHERE id = $getId
+                                                                ");
                     // printR($_GET['id']);
                     ?>
 
@@ -173,33 +206,90 @@
                         }
                     }
 
-                    if ($acao == 'save') {
-                        $salvar = [
-                                'nome' => $_POST['nome']
-                                ];
-                        if (isset($_POST['id'])) {
-                            #################
-                            ##EDIÇÃO/UPDATE##
-                            #################
-                            $where = ['id' => $_POST['id']];
-                            $update = $database->update('perfil', $salvar, $where, 1);
-                            $idLast = $_POST['id'];
-                            printR($_POST['id']);
-                        } else {
-                            ###################
-                            ##CADASTRO/INSERT##
-                            ###################
-                            $insert = $database->insert('perfil', $salvar);
-                            $idLast = $database->lastid();
-                            printR($salvar);
-                            if ($insert) {
-                                mensagem('Usuário cadastro com sucesso', 'success');
-                            } else {
-                                mensagem('Não foi possível cadastrar o usuário', 'danger');
-                            }
-                        }
+                    if ($acao == 'formPermissoes') {
+
+                        $permissoes = $database->get_results("SELECT perm.id
+                                                                    ,perm.id_menu
+                                                                    ,m.nome as menu_nome
+                                                                    ,p.nome as perfil_nome
+                                                                    FROM permissao perm
+                                                                    left join menu m on m.id = perm.id_menu 
+                                                                    left join perfil p on p.id = perm.id_perfil
+                                                                    WHERE perm.id_perfil = $getId");
+
+                        $menus = $database->get_results("SELECT * FROM menu m WHERE m.id NOT IN (SELECT id_menu FROM permissao WHERE id_perfil = $getId)");
                         ?>
-                        <a href="./perfil.php" type="button" class="btn btn-danger" data-dismiss="modal">Fechar</a>
+                        <div class="card">
+                            <div class="form-group" style="margin: 15px">
+                                <h2>Permissões - <?php echo $permissoes[0]['perfil_nome']; ?></h2>
+
+
+                                <div class="col">
+                                    <form action="./perfil.php?acao=formPermissoes&id=<?php echo $getId ?>" method="POST">
+                                        <select class="form-control form-control-lg" id="menu">
+                                            <option value="">Selecione</option>
+                                            <?php
+                                            foreach ($menus as $menu) {
+                                                echo '<option value="' . $menu['id'] . '">' . $menu['nome'] . '</option>';
+                                            }
+                                            ?>
+
+                                        </select>
+                                        <button type="submit" class="btn btn-success btn-sm" style="margin: 10px; margin-bottom: 10px; float: right;">Salvar</button>
+                                    </form>
+                                </div>
+ 
+                                <?php
+                                #######################
+                                ##ADICIONAR PERMISSAO##
+                                #######################
+
+                                if ($_POST) {
+                                    $salvar = [
+                                        'id_menu' => $_POST['menu'],
+                                        'id_perfil' => $_GET['id']
+                                    ];
+
+                                    $insert = $database->insert('permissao', $salvar);
+                                    $idLast = $database->lastid();
+                                    // printR($salvar);
+                                    if ($insert) {
+                                        mensagem('Usuário cadastro com sucesso', 'success');
+                                    } else {
+                                        mensagem('Não foi possível cadastrar o usuário', 'danger');
+                                    }
+                                }
+                                ?>
+
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="row">ID</th>
+                                            <th>ID Menu</th>
+                                            <th>Menu Nome</th>
+                                            <th>Funções</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        foreach ($permissoes as $permissao) {
+                                            echo '<tr>
+                                        <th scope="row">' . $permissao['id'] . '</th>
+                                        <td>' . $permissao['id_menu'] . '</td>
+                                        <td>' . $permissao['menu_nome'] . '</td>
+                                            <td width=150px> 
+                                                <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal"> Excluir </a>
+                                            </td>
+                                        </tr>';
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <a href="./perfil.php" class="btn btn-primary btn-sm">Voltar</a>
+                            </div>
+                        </div>
+
                 <?php
                     }
                 } else {
