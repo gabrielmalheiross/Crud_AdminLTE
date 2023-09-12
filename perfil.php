@@ -208,26 +208,30 @@
 
                     if ($acao == 'formPermissoes') {
 
+                        $nomePerfil = $database->get_results("SELECT 
+                                                                    p.id
+                                                                    ,p.nome as perfil_nome
+                                                                    FROM perfil p
+                                                                    WHERE p.id = $getId
+                                                                    ");
+    
                         $permissoes = $database->get_results("SELECT perm.id
                                                                     ,perm.id_menu
                                                                     ,m.nome as menu_nome
-                                                                    ,p.nome as perfil_nome
                                                                     FROM permissao perm
                                                                     left join menu m on m.id = perm.id_menu 
-                                                                    left join perfil p on p.id = perm.id_perfil
                                                                     WHERE perm.id_perfil = $getId");
 
                         $menus = $database->get_results("SELECT * FROM menu m WHERE m.id NOT IN (SELECT id_menu FROM permissao WHERE id_perfil = $getId)");
                         ?>
                         <div class="card">
                             <div class="form-group" style="margin: 15px">
-                                <h2>Permissões - <?php echo $permissoes[0]['perfil_nome']; ?></h2>
+                                <h2>Permissões - <?php echo $nomePerfil[0]['perfil_nome']; ?></h2>
 
 
                                 <div class="col">
                                     <form action="./perfil.php?acao=formPermissoes&id=<?php echo $getId ?>" method="POST">
-                                        <select class="form-control form-control-lg" id="menu">
-                                            <option value="">Selecione</option>
+                                        <select class="form-control form-control-lg" name="menu">
                                             <?php
                                             foreach ($menus as $menu) {
                                                 echo '<option value="' . $menu['id'] . '">' . $menu['nome'] . '</option>';
@@ -238,7 +242,7 @@
                                         <button type="submit" class="btn btn-success btn-sm" style="margin: 10px; margin-bottom: 10px; float: right;">Salvar</button>
                                     </form>
                                 </div>
- 
+
                                 <?php
                                 #######################
                                 ##ADICIONAR PERMISSAO##
@@ -246,15 +250,19 @@
 
                                 if ($_POST) {
                                     $salvar = [
-                                        'id_menu' => $_POST['menu'],
-                                        'id_perfil' => $_GET['id']
+                                        'id_perfil' => $_GET['id'],
+                                        'id_menu' => $_POST['menu']
                                     ];
 
                                     $insert = $database->insert('permissao', $salvar);
                                     $idLast = $database->lastid();
-                                    // printR($salvar);
+                                    // printR($insert);
                                     if ($insert) {
                                         mensagem('Usuário cadastro com sucesso', 'success');
+
+                                        echo "<script> setTimeout(()=>{
+                                            location.href = './perfil.php?acao=formPermissoes&id=$getId'
+                                        }, 2000) </script>";
                                     } else {
                                         mensagem('Não foi possível cadastrar o usuário', 'danger');
                                     }
@@ -275,13 +283,13 @@
                                         <?php
                                         foreach ($permissoes as $permissao) {
                                             echo '<tr>
-                                        <th scope="row">' . $permissao['id'] . '</th>
-                                        <td>' . $permissao['id_menu'] . '</td>
-                                        <td>' . $permissao['menu_nome'] . '</td>
-                                            <td width=150px> 
-                                                <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal"> Excluir </a>
-                                            </td>
-                                        </tr>';
+                                                    <th scope="row">' . $permissao['id'] . '</th>
+                                                    <td>' . $permissao['id_menu'] . '</td>
+                                                    <td>' . $permissao['menu_nome'] . '</td>
+                                                        <td width=150px> 
+                                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="pegar_dados(' .  $permissao['id'] . ', \'' . $permissao['menu_nome'] . '\', '. $getId .')" > Excluir </button>
+                                                        </td>
+                                                    </tr>';
                                         }
                                         ?>
                                     </tbody>
@@ -290,7 +298,49 @@
                             </div>
                         </div>
 
+                        <div class="modal fade" id="deleteModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="./perfil.php?acao=deletePermissoes" method="POST">
+                                        <div class="modal-body">
+                                            <p>Deseja realmente excluir <b id="nome_pessoa"></b>?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                                            <input type="hidden" name="permissao_id" id="permissao_id" value="">
+                                            <input type="hidden" name="perfil_id" id="perfil_id" value="">
+                                            <input type="submit" class="btn btn-danger" value="Sim">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                 <?php
+                    }
+
+                    if ($acao == 'deletePermissoes') {
+                        if ($_POST) {
+
+                            $perfil_id = $_POST['perfil_id'];
+                            $where = array('id' => $_POST['permissao_id']);
+
+                            $delete = $database->delete('permissao', $where, 1);
+                            if ($delete) {
+                                mensagem('Usuário deletado com sucesso', 'success');
+                                
+                                echo "<script> setTimeout(()=>{
+                                    location.href = './perfil.php?acao=formPermissoes&id=$perfil_id'
+                                }, 2000) </script>";
+                            } else {
+                                mensagem('Não foi possível deletar o usuário', 'danger');
+                            }
+                        }
                     }
                 } else {
                     header("location: /jadminlte/principal.php?msg=sem-autorização");
@@ -299,6 +349,14 @@
 
                     </div>
             </div>
+
+            <script>
+                function pegar_dados(id, nome,perfil_id) {
+                    document.getElementById('nome_pessoa').innerHTML = nome;
+                    document.getElementById('permissao_id').value = id;
+                    document.getElementById('perfil_id').value = perfil_id;
+                }
+            </script>
 
             <!-- jQuery -->
             <script src="/jadminlte/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>

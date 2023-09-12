@@ -9,10 +9,11 @@ function printR($var)
 function mensagem($texto, $tipo)
 {
 	echo
-	"<div class='alert alert-$tipo' role='alert'>
+	"<div class='alert alert-$tipo' style='width: 300px;' role='alert'>
                 $texto 
             </div>";
 }
+
 
 function validaUsuario(){
 	if(!$_SESSION['idUser']){
@@ -24,11 +25,3 @@ function validaUsuario(){
 }
 
 ?>
-
-<script>
-	function pegar_dados(id, nome) {
-            document.getElementById('nome_excluir').innerHTML = nome;
-            document.getElementById('id_excluir').value = id;
-            document.getElementById('nome_excluir1').value = nome;
-        }
-</script>

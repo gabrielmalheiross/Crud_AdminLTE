@@ -91,17 +91,17 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
                         if ($acao == 'form') {
                             if ($getId) {
-                            
+
                                 $edicao = $database->get_results("SELECT m.*
                                                                     FROM menu m 
                                                                     WHERE m.id = '$getId'");
                                 // printR($edicao);
-                            }else{
+                            } else {
                                 $edicao[0]['id'] = null;
                                 $edicao[0]['nome'] = null;
                                 $edicao[0]['link'] = null;
                             }
-                            
+
 
                             $menus_pai = $database->get_results("SELECT * 
                                                                     FROM menu
@@ -109,54 +109,65 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                             ?>
                             <div class="card">
                                 <div class="form-group" style="margin: 15px">
-                                    <form action="./usuarios.php?acao=save" method="POST" enctype="multipart/form-data">
+                                    <form action="./menu.php?acao=save" method="POST" enctype="multipart/form-data">
                                         <div class="row">
                                             <div class="col-1">
                                                 <label for="id">ID:</label>
-                                                <input type="text" class="form-control" name="id" readonly <?php echo $edicao[0]['id']; ?>>
+                                                <input type="text" class="form-control" name="id" readonly value="<?= $edicao[0]['id']; ?>">
                                             </div>
                                             <div class="col">
                                                 <label for="nome">Nome:</label>
-                                                <input type="text" class="form-control" name="nome" placeholder="Digite..." required <?php echo $edicao[0]['nome']; ?>>
+                                                <input type="text" class="form-control" name="nome" placeholder="Digite..." required value="<?= $edicao[0]['nome']; ?>">
                                             </div>
                                             <div class="col-3">
                                                 <label for="link">Link:</label>
-                                                <input type="text" class="form-control" name="link" placeholder="Digite..." required <?php echo $edicao[0]['link']; ?>>
+                                                <input type="text" class="form-control" name="link" placeholder="Digite..." value="<?= $edicao[0]['link']; ?>">
                                             </div>
                                             <div class="col-3">
                                                 <label for="menu_pai">Menu-pai:</label>
                                                 <select class="form-control" name="menu_pai" required>
                                                     <option value="">Selecione</option>
-                                                    <?php
-                                                    foreach ($perfils as $perfil) {
-                                                        echo '<option value="' . $perfil['id'] . '">' . $perfil['nome'] . '</option>';
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <label for="perfil">Perfil:</label>
-                                                <select class="form-control" name="perfil" required>
-                                                    <option value="">Selecione</option>
-                                                    <?php
-                                                    foreach ($menus_pai as $menu_pai) {
-                                                        echo '<option value="' . $menu_pai['id'] . '">' . $menu_pai['nome'] . '</option>';
-                                                    }
-                                                    ?>
+                                                    <?php foreach ($menus_pai as $menu_pai) : ?>
+                                                        <option value="<?= $menu_pai['id'] ?>" <?php if ($edicao[0]['menu_pai'] == $menu_pai['id']) {
+                                                                                                    echo "selected";
+                                                                                                }; ?>> <?= $menu_pai['nome'] ?></option>
+                                                    <?php endforeach; ?>
                                                 </select>
                                             </div>
                                         </div>
 
                                         <div class="form-group" style="margin-top: 10px;">
-                                            <a href="./usuarios.php" type="button" class="btn btn-danger" data-dismiss="modal">Fechar</a>
+                                            <a href="./menu.php" type="button" class="btn btn-danger" data-dismiss="modal">Fechar</a>
                                             <button type="submit" class="btn btn-primary">Salvar</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                     <?php
+                        }
+
+                        if ($acao == 'save') {
+                            if ($_POST['id']) {
+                                #################
+                                ##EDIÇÃO/UPDATE##
+                                #################
+                                $where = ['id' => $_POST['id']];
+                                $update = $database->update('menu', $_POST, $where, 1);
+                                $idLast = $_POST['id'];
+                                // printR($_POST['id']);
+                            } else {
+                                ###################
+                                ##CADASTRO/INSERT##
+                                ###################
+                                $insert = $database->insert('menu', $_POST);
+                                $idLast = $database->lastid();
+                                // printR($salvar);
+                                if ($insert) {
+                                    mensagem('Menu cadastro com sucesso', 'success');
+                                } else {
+                                    mensagem('Não foi possível cadastrar o menu', 'danger');
+                                }
+                            }
                         }
                     } else {
                         header("location: /jadminlte/principal.php?msg=sem-autorização");

@@ -114,7 +114,6 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
             if ($acao == 'form') {
 
                 if ($getId) {
-                    # code...
                 
                     $edicao = $database->get_results("SELECT u.*
                                                         ,p.id as id_perfil
@@ -122,7 +121,6 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                                         FROM usuario u 
                                                         LEFT JOIN perfil p on p.id = u.perfil 
                                                         WHERE u.id = '$getId'");
-
 
                     // printR($edicao);
                 }else{
