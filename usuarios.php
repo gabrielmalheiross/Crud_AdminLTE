@@ -22,7 +22,9 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
+        <!-- <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
         <!-- icheck bootstrap -->
         <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
         <!-- Theme style -->
@@ -114,7 +116,7 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
             if ($acao == 'form') {
 
                 if ($getId) {
-                
+
                     $edicao = $database->get_results("SELECT u.*
                                                         ,p.id as id_perfil
                                                         ,p.nome as nome_perfil
@@ -123,7 +125,7 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                                         WHERE u.id = '$getId'");
 
                     // printR($edicao);
-                }else{
+                } else {
                     $edicao[0]['id'] = null;
                     $edicao[0]['nome'] = null;
                     $edicao[0]['login'] = null;
@@ -140,11 +142,11 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                     </div>
                                     <div class="col">
                                         <label for="nome">Nome:</label>
-                                        <input type="text" class="form-control" name="nome" placeholder="Digite..." required value="<?php echo $edicao[0]['nome'];?>">
+                                        <input type="text" class="form-control" name="nome" placeholder="Digite..." required value="<?php echo $edicao[0]['nome']; ?>">
                                     </div>
                                     <div class="col-3">
                                         <label for="login">Login:</label>
-                                        <input type="text" class="form-control" name="login" placeholder="Digite..." required value="<?php echo $edicao[0]['login'];?>">
+                                        <input type="text" class="form-control" name="login" placeholder="Digite..." required value="<?php echo $edicao[0]['login']; ?>">
                                     </div>
                                     <div class="col-3">
                                         <label for="senha">Senha:</label>
@@ -156,11 +158,11 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                         <label for="perfil">Perfil:</label>
                                         <select class="form-control" name="perfil" required>
                                             <option value="">Selecione</option>
-                                            <?php
-                                            foreach ($perfils as $perfil) {
-                                                echo '<option value="' . $perfil['id'] . '">' . $perfil['nome'] . '</option>';
-                                            }
-                                            ?>
+                                            <?php foreach ($perfils as $perfil) : ?>
+                                                <option value="<?= $perfil['id'] ?>" <?php if ($edicao[0]['id_perfil'] == $perfil['id']) {
+                                                                                            echo "selected";
+                                                                                        }; ?>> <?= $perfil['nome'] ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -247,6 +249,11 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                         $update = $database->update('usuario', $salvar, $where, 1);
                         $idLast = $_POST['id'];
                         // printR($_POST['id']);
+                        if ($update) {
+                            mensagem('Usuário atualizado com sucesso', 'success');
+                        } else {
+                            mensagem('Não foi possível atualizar o usuário', 'danger');
+                        }
                     } else {
                         ###################
                         ##CADASTRO/INSERT##

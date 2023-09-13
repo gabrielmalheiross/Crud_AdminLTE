@@ -33,6 +33,7 @@
                                                             ,menu.link as link
                                                             ,menu.nome as menu_nome
                                                             ,menu.id as menu_id
+                                                            ,menu.icone as icone
                                                             FROM permissao
                                                             LEFT JOIN menu on menu.id = permissao.id_menu
                                                             WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai is null order by menu.ordem");
@@ -42,7 +43,7 @@
                             if ($menuTemplate['link']) {
                                 echo '<li class="nav-item">
                                             <a href="/jadminlte/' . $menuTemplate['link'] . '" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
+                                                <i class="' . $menuTemplate['icone'] . ' nav-icon"></i>
                                                 <p>' . $menuTemplate['menu_nome'] . '</p>
                                             </a>
                                         </li>';
@@ -52,6 +53,7 @@
                                                                             permissao.*
                                                                             ,menu.link as link
                                                                             ,menu.nome as menu_nome
+                                                                            ,menu.icone as icone
                                                                             FROM permissao
                                                                             LEFT JOIN menu on menu.id = permissao.id_menu
                                                                             WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai=" . $menuTemplate['menu_id'] . " order by menu.ordem");
@@ -59,7 +61,7 @@
                                 echo '
                                         <li class="nav-item menu-close">
                                             <a href="#" class="nav-link">
-                                                <i class="fa fa-wrench nav-icon"></i>
+                                                <i class="' . $menuTemplate['icone'] . ' nav-icon"></i>
                                                     <p>
                                                         ' . $menuTemplate['menu_nome'] . '
                                                         <i class="right fas fa-angle-left"></i>
@@ -72,7 +74,7 @@
                                 foreach ($menusFilhos as $menuFilho) {
                                     echo '  <li class="nav-item">
                                                 <a href="/jadminlte/' . $menuFilho['link'] . '" class="nav-link">
-                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <i class="' . $menuFilho['icone'] . ' nav-icon"></i>
                                                     <p>' . $menuFilho['menu_nome'] . '</p>
                                                 </a>
                                             </li>';
@@ -85,18 +87,7 @@
                             }
                         }
                         ?>
-                        <!-- <li class="nav-item">
-                            <a href="/jadminlte/pesquisa.php" class="nav-link">
-                                <i class="fas fa-search fa-fw"></i>
-                                <p>Pesquisa</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-chart-pie nav-icon"></i>
-                                <p>Gráficos</p>
-                            </a>
-                        </li> -->
+                        
                     </ul>
                 </li>
 

@@ -27,7 +27,8 @@
             <!-- Google Font: Source Sans Pro -->
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
             <!-- Font Awesome -->
-            <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
+            <!-- <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css"> -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
             <!-- icheck bootstrap -->
             <link rel="stylesheet" href="/jadminlte/AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
             <!-- Theme style -->
@@ -111,11 +112,11 @@
                                     <div class="row">
                                         <div class="col-1">
                                             <label for="id">ID:</label>
-                                            <input type="text" class="form-control" name="id" readonly <?php echo $edicao[0]['id']; ?>>
+                                            <input type="text" class="form-control" name="id" readonly value="<?php echo $edicao[0]['id']; ?>">
                                         </div>
                                         <div class="col-3">
                                             <label for="nome">Nome:</label>
-                                            <input type="text" class="form-control" name="nome" placeholder="Digite..." required <?php echo $edicao[0]['nome']; ?>>
+                                            <input type="text" class="form-control" name="nome" placeholder="Digite..." required value="<?php echo $edicao[0]['nome']; ?>">
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-top: 10px;">
@@ -142,6 +143,11 @@
                         $update = $database->update('perfil', $salvar, $where, 1);
                         $idLast = $_POST['id'];
                         // printR($_POST['id']);
+                        if ($update) {
+                            mensagem('Perfil atualizado com sucesso', 'success');
+                        } else {
+                            mensagem('Não foi possível atualizar o perfil', 'danger');
+                        }
                     } else {
                         ###################
                         ##CADASTRO/INSERT##
@@ -150,9 +156,9 @@
                         $idLast = $database->lastid();
                         // printR($salvar);
                         if ($insert) {
-                            mensagem('Usuário cadastro com sucesso', 'success');
+                            mensagem('Perfil cadastrado com sucesso', 'success');
                         } else {
-                            mensagem('Não foi possível cadastrar o usuário', 'danger');
+                            mensagem('Não foi possível cadastrar o perfil', 'danger');
                         }
                     }
                     ?>
@@ -160,7 +166,9 @@
                     <?php
                 }
 
-
+                ##############
+                ##GET DELETE##
+                ##############
                 if ($acao == 'delete') {
 
 
@@ -173,7 +181,6 @@
                     // printR($_GET['id']);
                     ?>
 
-                        <!-- Excluir Usuário -->
 
                         <div class="card">
                             <div class="form-group" style="margin: 15px">
@@ -192,6 +199,7 @@
                         </div>
 
                         <?php
+
                         ###########
                         ##DELETAR##
                         ###########
@@ -206,6 +214,10 @@
                         }
                     }
 
+                    ################################
+                    ##GET FORMULARIO DE PERMISSÕES##
+                    ################################
+
                     if ($acao == 'formPermissoes') {
 
                         $nomePerfil = $database->get_results("SELECT 
@@ -214,7 +226,7 @@
                                                                     FROM perfil p
                                                                     WHERE p.id = $getId
                                                                     ");
-    
+
                         $permissoes = $database->get_results("SELECT perm.id
                                                                     ,perm.id_menu
                                                                     ,m.nome as menu_nome
@@ -237,7 +249,6 @@
                                                 echo '<option value="' . $menu['id'] . '">' . $menu['nome'] . '</option>';
                                             }
                                             ?>
-
                                         </select>
                                         <button type="submit" class="btn btn-success btn-sm" style="margin: 10px; margin-bottom: 10px; float: right;">Salvar</button>
                                     </form>
@@ -287,7 +298,7 @@
                                                     <td>' . $permissao['id_menu'] . '</td>
                                                     <td>' . $permissao['menu_nome'] . '</td>
                                                         <td width=150px> 
-                                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="pegar_dados(' .  $permissao['id'] . ', \'' . $permissao['menu_nome'] . '\', '. $getId .')" > Excluir </button>
+                                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="pegar_dados(' .  $permissao['id'] . ', \'' . $permissao['menu_nome'] . '\', ' . $getId . ')" > Excluir </button>
                                                         </td>
                                                     </tr>';
                                         }
@@ -333,7 +344,7 @@
                             $delete = $database->delete('permissao', $where, 1);
                             if ($delete) {
                                 mensagem('Usuário deletado com sucesso', 'success');
-                                
+
                                 echo "<script> setTimeout(()=>{
                                     location.href = './perfil.php?acao=formPermissoes&id=$perfil_id'
                                 }, 2000) </script>";
@@ -351,7 +362,7 @@
             </div>
 
             <script>
-                function pegar_dados(id, nome,perfil_id) {
+                function pegar_dados(id, nome, perfil_id) {
                     document.getElementById('nome_pessoa').innerHTML = nome;
                     document.getElementById('permissao_id').value = id;
                     document.getElementById('perfil_id').value = perfil_id;

@@ -21,6 +21,9 @@
 ** ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
 ** FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
 **------------------------------------------------------------------------------ */
+
+use function PHPSTORM_META\type;
+
 if( file_exists('./conexao/config.php') ) {
 	include_once('./conexao/config.php');
 }else if( file_exists('../conexao/config.php') ){
@@ -360,14 +363,14 @@ class DB
         foreach( $variables as $field => $value )
         {
             $fields[] = $field;
-            $values[] = "'".$value."'";
+            $values[] = $this->parseValueSQL($value);
         }
         $fields = ' (' . implode(', ', $fields) . ')';
         $values = '('. implode(', ', $values) .')';
         
         $sql .= $fields .' VALUES '. $values;
 
-        $query = $this->link->query( $sql );
+        $this->link->query( $sql );
         
         if( $this->link->error )
         {
@@ -428,6 +431,27 @@ class DB
         }
     }
     
+    private function parseValueSQL($value){
+        // "boolean"
+        // "integer"
+        // "double" (por razões históricas "double" é é retornado no caso de float, e não simplesmente "float")
+        // "string"
+        // "array"
+        // "object"
+        // "resource"
+        // "NULL"
+        // "unknown type"
+
+        if(gettype($value) == 'string'){
+            return "'$value'";
+        }else if(gettype($value) == 'integer' || gettype($value) == 'double' || gettype($value) == 'boolean'){
+            return $value;
+        }else if( gettype($value) == 'NULL') {
+            return "NULL";
+        }else{
+            return "'$value'";
+        }
+    }
     
     /**
      * Update data in database table
@@ -453,8 +477,7 @@ class DB
         $sql = "UPDATE ". $table ." SET ";
         foreach( $variables as $field => $value )
         {
-            
-            $updates[] = "`$field` = '$value'";
+            $updates[] = "`$field` = " . $this->parseValueSQL($value);
         }
         $sql .= implode(', ', $updates);
         
@@ -465,7 +488,7 @@ class DB
             {
                 $value = $value;
 
-                $clause[] = "$field = '$value'";
+                $clause[] = "`$field` = ".$this->parseValueSQL($value);
             }
             $sql .= ' WHERE '. implode(' AND ', $clause);   
         }
@@ -475,7 +498,7 @@ class DB
             $sql .= ' LIMIT '. $limit;
         }
 
-        $query = $this->link->query( $sql );
+        $this->link->query( $sql );
 
         if( $this->link->error )
         {
@@ -486,63 +509,6 @@ class DB
         {
             return true;
         }
-    }
-    
-    
-    
-    /**
-     * Update data in database table (para quando a pessoa foi servidor e em atualizacao cadastral deixa de ser, o update set null data_vida_publica)
-     *
-     * @access public
-     * @param string table name
-     * @param array values to update table column => column value
-     * @param array where parameters table column => column value
-     * @param int limit
-     * @return bool
-     *
-     */
-    public function update_pessoa( $table, $variables = array(), $where = array(), $limit = '' )
-    {
-    	//Make sure the required data is passed before continuing
-    	//This does not include the $where variable as (though infrequently)
-    	//queries are designated to update entire tables
-    	if( empty( $variables ) )
-    	{
-    		return false;
-    		exit;
-    	}
-    	$sql = "UPDATE ". $table ." SET data_vida_publica = NULL";
-    
-    	//$sql .= implode(', ', $updates);
-    
-    	//Add the $where clauses as needed
-    	if( !empty( $where ) )
-    	{
-    		foreach( $where as $field => $value )
-    		{
-    			$value = $value;
-    
-    			$clause[] = "$field = '$value'";
-    		}
-    		$sql .= ' WHERE '. implode(' AND ', $clause);
-    	}
-    
-    	if( !empty( $limit ) )
-    	{
-    		$sql .= ' LIMIT '. $limit;
-    	}
-    
-    	$query = $this->link->query( $sql );
-    
-    	if( $this->link->error )
-    	{
-    		$this->log_db_errors( $this->link->error, $sql );
-    		return false;
-    	}
-    	else
-    	{
-    		return true;
-    	}
     }
     
     
@@ -578,7 +544,7 @@ class DB
             $sql .= " LIMIT ". $limit;
         }
       
-        $query = $this->link->query( $sql );
+        $this->link->query( $sql );
 
         if( $this->link->error )
         {
@@ -592,53 +558,6 @@ class DB
         }
     }
 	
-	
-	 /**
-     * Delete data from table
-     *
-     * @access public
-     * @param string table name
-     * @param array where parameters table column => column value
-     * @param int max number of rows to remove.
-     * @return bool
-     *
-     */
-    public function delete2( $table, $where = array(), $limit = '' )
-    {
-        //Delete clauses require a where param, otherwise use "truncate"
-        if( empty( $where ) )
-        {
-            return false;
-            exit;
-        }
-        
-        $sql = "DELETE FROM ". $table;
-        foreach( $where as $field => $value )
-        {
-            $value = $value;
-            $clause[] = "$field = $value";
-        }
-        $sql .= " WHERE ". implode(' AND ', $clause);
-        
-        if( !empty( $limit ) )
-        {
-            $sql .= " LIMIT ". $limit;
-        }
-      
-        $query = $this->link->query( $sql );
-
-        if( $this->link->error )
-        {
-            //return false; //
-            $this->log_db_errors( $this->link->error, $sql );
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-    
     
     /**
      * Get last auto-incrementing ID associated with an insertion
