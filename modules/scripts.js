@@ -3,11 +3,11 @@ function openModal(id, titulo, url) { // funcao para abrir o modal
     // Cria-se uma variavel html com código do esqueleto do nosso modal
     // Pega-se os valores recebidos pelo parametro e adiciona ao corpo do html
     let html = ` 
-                <div class="modal fade" id="${id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                <div class="modal fade" id="${id}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">${titulo}</h5>
+                                <h5 class="modal-title" id="staticBackdropLabel">${titulo}</h5>
                             </div>
                             
                             <div id="${id}_content" class="modal-body">
@@ -37,5 +37,12 @@ function openModal(id, titulo, url) { // funcao para abrir o modal
     // Evento fechar modal
     $(`#${id}`).on('hidden.bs.modal', function (e) {
         $(`#${id}`).remove();
+    });
+}
+
+
+function loadModal( id, url ){
+    $(`#${id}_content`).load(url, function (response, status, xhr) {
+        console.log(response);
     });
 }

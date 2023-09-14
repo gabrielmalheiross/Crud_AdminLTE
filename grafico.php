@@ -4,19 +4,16 @@ include "./conexao/validar.php";
 include "./base/Funcoes.class.php";
 
 $database = new DB();
+$acao = isset($_GET['acao']) ? $_GET['acao'] : null;
 
 // printR($_SESSION);
 // exit;
 $idUser = $_SESSION['idUser'];
-$usuarios = $database->get_results("SELECT u.*
-                                            ,p.nome as perfil_nome
-                                            ,p.id as perfil_id
-                                            FROM usuario u 
-                                            LEFT JOIN perfil p on p.id = u.perfil
-                                            ");
+
 
 // session_start();
 // validaUsuario();
+
 ?>
 
 <html lang="en">
@@ -46,13 +43,11 @@ $usuarios = $database->get_results("SELECT u.*
 
     <body>
         <?php include "./template/template.php"; ?>
-
         <div class="content-wrapper px-4 py-2" style="min-height: 849px;">
-            <h1>Gráfico teste</h1>
-
+            <h1>Tela de Usuários por Modal</h1>
             <div class="card-header">
                 <div class="col-sm-6">
-                    <a type="button" href="./usuarios.php?acao=form" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
+                    <button type="button" class="btn btn-outline-dark btn-sm" style="margin: 10px" onclick="modalCadastro()">Novo</button>
                 </div>
                 <div class="card">
                     <div style="margin: 15px">
@@ -67,45 +62,112 @@ $usuarios = $database->get_results("SELECT u.*
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <?php
+                                $usuarios = $database->get_results("SELECT u.*
+                                                                            ,p.nome as perfil_nome
+                                                                            ,p.id as perfil_id
+                                                                            FROM usuario u 
+                                                                            LEFT JOIN perfil p on p.id = u.perfil
+                                                                            ");
 
-
-                                foreach ($usuarios as $usuario) {
-                                    echo '
-                                            <tr>
-                                                <th scope="row">' . $usuario['id'] . '</th>
-                                                <td>' . $usuario['nome'] . '</td> 
-                                                <td>' . $usuario['login'] . '</td>
-                                                <td>' . $usuario['perfil_nome'] . '</td>
-                                                <td width=150px>
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="abrirModal(' . $usuario['id'] . ')">Editar</button>
-                                                    <a href="./usuarios.php?acao=delete&id=' . $usuario['id'] . '" class="btn btn-danger btn-sm"">Excluir</a>
-                                                </td>
-                                            </tr>';
-                                }
-
+                                foreach ($usuarios as $usuario) :
+                                ?>
+                                    <tr>
+                                        <th scope="row"><?= $usuario['id'] ?></th>
+                                        <td><?= $usuario['nome'] ?></td>
+                                        <td><?= $usuario['login'] ?></td>
+                                        <td><?= $usuario['perfil_nome'] ?></td>
+                                        <td width=150px>
+                                            <button type="button" class="btn btn-success btn-sm" onclick="modalEdicao(<?php echo $usuario['id']; ?>)">Editar</button>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="modalExcluir(<?php echo $usuario['id']; ?>)">Excluir</button>
+                                        </td>
+                                    </tr>
+                                <?php
+                                endforeach;
                                 ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+            <?php
+            if ($acao == 'save') {
+                $salvar = [
+                    'nome' => $_POST['nome'],
+                    'login' => $_POST['login'],
+                    'senha' => md5($_POST['senha']),
+                    'perfil' => $_POST['perfil']
+                ];
 
+                if ($_POST['id']) {
+                    #################
+                    ##EDIÇÃO/UPDATE##
+                    #################
+                    $where = ['id' => $_POST['id']];
+                    $update = $database->update('usuario', $salvar, $where, 1);
+                    $idLast = $_POST['id'];
+                    // printR($_POST['id']);
+                    if ($update) {
+                        mensagem('Usuário atualizado com sucesso', 'success');
+                        echo "<script> setTimeout(()=>{
+                            location.href = 'grafico.php'
+                        }, 2000) </script>";
+                    } else {
+                        mensagem('Não foi possível atualizar o usuário', 'danger');
+                    }
+                } else {
+                    ###################
+                    ##CADASTRO/INSERT##
+                    ###################
+                    $insert = $database->insert('usuario', $salvar);
+                    $idLast = $database->lastid();
+                    // printR($salvar);
+                    if ($insert) {
+                        mensagem('Usuário cadastro com sucesso', 'success');
+                        echo "<script> setTimeout(()=>{
+                                    location.href = 'grafico.php'
+                                }, 2000) </script>";
+                    } else {
+                        mensagem('Não foi possível cadastrar o usuário', 'danger');
+                    }
+                }
+            }
+
+            if ($acao == 'delete') {
+                if ($_POST) {
+                    $where = array('id' => $_GET['id']);
+                    $delete = $database->delete('usuario', $where, 1);
+                    if ($delete) {
+                        mensagem('Usuário deletado com sucesso', 'success');
+                        echo "<script> setTimeout(()=>{
+                            location.href = 'grafico.php'
+                        }, 2000) </script>";
+                    } else {
+                        mensagem('Não foi possível deletar o usuário', 'danger');
+                        echo "<script> setTimeout(()=>{
+                            location.href = 'grafico.php'
+                        }, 2000) </script>";
+                    }
+                }
+            }
+            ?>
+
+        </div>
     </body>
 
-
-    <!-- jQuery -->
-    <script src="/jadminlte/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="/jadminlte/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="/jadminlte/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
-    <!-- <script src="/jadminlte/AdminLTE-3.2.0/dist/js/demo.js"></script> -->
+    <?php include './template/scripts.php' ?>
 
     <script>
-        function abrirModal(id) { //Por aqui passa o id do onclick
-            openModal('Editar', 'Editar Usuário', `./modules/modalCadastro.php?id=${id}`); //pega a function do arquivo scriptjs, passa os parametros: nome moda, titulo modal, e localização do modal passando id como parametro
+        function modalEdicao(id) { //Por aqui passa o id do onclick
+            openModal('Editar', 'Editar Usuário', `./modules/modalUsuarioEdicao.php?id=${id}`); //pega a function do arquivo scriptjs, passa os parametros: nome moda, titulo modal, e localização do modal passando id como parametro
+        }
+
+        function modalExcluir(id) { //Por aqui passa o id do onclick
+            openModal('Excluir', 'Excluir Usuário', `./modules/modalUsuarioExcluir.php?id=${id}`); //pega a function do arquivo scriptjs, passa os parametros: nome moda, titulo modal, e localização do modal passando id como parametro
+        }
+
+        function modalCadastro() {
+            openModal('Cadastro', 'Cadastrar Usuário', `./modules/modalUsuarioCadastro.php`); //pega a function do arquivo scriptjs, passa os parametros: nome moda, titulo modal, e localização do modal passando id como parametro
         }
     </script>
 

@@ -197,7 +197,7 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
                     <div class="card">
                         <div class="form-group" style="margin: 15px">
-                            <form action="./usuarios.php?acao=delete&id=<?php echo $_GET['id'] ?>" method="POST">
+                            <form action="./usuarios.php?acao=delete&id=<?= $_GET['id'] ?>" method="POST">
                                 <div class="modal-body">
                                     <?php echo '<p>Deseja realmente excluir <b id="nome_excluir">' . $getUsuario[0]['get_nome'] . '</b>?</p>';
                                     ?>

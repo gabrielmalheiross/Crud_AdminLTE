@@ -71,15 +71,15 @@
 
                                         foreach ($perfis as $perfil) {
                                             echo '
-                                <tr>
-                                    <th scope="row">' . $perfil['id'] . '</th>
-                                    <td>' . $perfil['nome'] . '</td> 
-                                    <td width=300px>
-                                        <a href="./perfil.php?acao=form&id=' . $perfil['id'] . '" class="btn btn-success btn-sm">Editar</a>
-                                        <a href="./perfil.php?acao=delete&id=' . $perfil['id'] . '" class="btn btn-danger btn-sm"">Excluir</a>
-                                        <a href="./perfil.php?acao=formPermissoes&id=' . $perfil['id'] . '" class="btn btn-warning btn-sm"">Permissões</a>
-                                     </td>
-                                </tr>';
+                                                <tr>
+                                                    <th scope="row">' . $perfil['id'] . '</th>
+                                                    <td>' . $perfil['nome'] . '</td> 
+                                                    <td width=300px>
+                                                        <a href="./perfil.php?acao=form&id=' . $perfil['id'] . '" class="btn btn-success btn-sm">Editar</a>
+                                                        <a href="./perfil.php?acao=delete&id=' . $perfil['id'] . '" class="btn btn-danger btn-sm"">Excluir</a>
+                                                        <a href="./perfil.php?acao=formPermissoes&id=' . $perfil['id'] . '" class="btn btn-warning btn-sm"">Permissões</a>
+                                                    </td>
+                                                </tr>';
                                         }
 
                                         ?>
@@ -284,9 +284,7 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th scope="row">ID</th>
-                                            <th>ID Menu</th>
-                                            <th>Menu Nome</th>
+                                            <th scope="row">Menu Nome</th>
                                             <th>Funções</th>
                                         </tr>
                                     </thead>
@@ -294,9 +292,7 @@
                                         <?php
                                         foreach ($permissoes as $permissao) {
                                             echo '<tr>
-                                                    <th scope="row">' . $permissao['id'] . '</th>
-                                                    <td>' . $permissao['id_menu'] . '</td>
-                                                    <td>' . $permissao['menu_nome'] . '</td>
+                                                    <td scope="row">' . $permissao['menu_nome'] . '</td>
                                                         <td width=150px> 
                                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="pegar_dados(' .  $permissao['id'] . ', \'' . $permissao['menu_nome'] . '\', ' . $getId . ')" > Excluir </button>
                                                         </td>
