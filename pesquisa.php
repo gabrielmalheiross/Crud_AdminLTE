@@ -45,11 +45,11 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
         <!-- AdminLTE App -->
         <script src="/jadminlte/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
         <!-- <script src="../../AdminLTE-3.2.0/dist/js/demo.js"></script> -->
-<?php
+    <?php
 } else {
     header("location: /jadminlte/principal.php?msg=sem-autorização");
 }
-?>
+    ?>
     </body>
 
     </html>

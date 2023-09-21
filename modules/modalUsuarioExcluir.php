@@ -18,7 +18,7 @@ $getUsuario = $database->get_results("SELECT
 ?>
 
 
-        <form action="grafico.php?acao=delete&id=<?= $getUsuario[0]['id'] ?>" method="POST">
+        <form action="usuariosModal.php?acao=delete&id=<?= $getUsuario[0]['id'] ?>" method="POST">
             <div class="modal-body">
                 <?php echo '<p>Deseja realmente excluir <b id="nome_excluir">' . $getUsuario[0]['get_nome'] . '</b>?</p>';
                 ?>

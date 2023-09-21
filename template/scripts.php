@@ -10,4 +10,4 @@
 <script src="/jadminlte/AdminLTE-3.2.0/dist/js/adminlte.min.js"></script>
 <!-- <script src="/jadminlte/AdminLTE-3.2.0/dist/js/demo.js"></script> -->
 
-<script src="./modules/scripts.js"></script>
+<script src="/jadminlte/modules/scripts.js"></script>

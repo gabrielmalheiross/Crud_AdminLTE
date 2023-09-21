@@ -54,27 +54,31 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
             ?>
                 <div class="card-header">
-                    <a type="button" href="menu.php?acao=form" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
-                    <div class="card">
-                        <table class="table table-bordered" style="margin: 15px">
-                            <thead>
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Nome</th>
-                                    <th scope="col">Link</th>
-                                    <th scope="col">Menu-Pai</th>
-                                    <th scope="col">Funções</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                    <div class="col-sm-6">
 
-                                $menus = $database->get_results("SELECT *
+                        <a type="button" href="menu.php?acao=form" class="btn btn-outline-dark btn-sm" style="margin: 10px">Novo</a>
+                    </div>
+                    <div class="card">
+                        <div style="margin: 15px">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Nome</th>
+                                        <th scope="col">Link</th>
+                                        <th scope="col">Menu-Pai</th>
+                                        <th scope="col">Funções</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    $menus = $database->get_results("SELECT *
                                                                 FROM menu");
 
-                                // printR($menus);
-                                foreach ($menus as $menu) {
-                                    echo '
+                                    // printR($menus);
+                                    foreach ($menus as $menu) {
+                                        echo '
                                 <tr>
                                     <th scope="row">' . $menu['id'] . '</th>
                                     <td>' . $menu['nome'] . '</td> 
@@ -85,12 +89,13 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                          <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirma" onclick ="pegar_dados(' . $menu['id'] . ', ' . $menu['nome'] . ')">Excluir</a>
                                      </td>
                                 </tr>';
-                                }
+                                    }
 
-                                ?>
+                                    ?>
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             <?php

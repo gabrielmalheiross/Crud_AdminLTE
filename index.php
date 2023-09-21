@@ -48,6 +48,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : null;
             //                                         ");
             $validaUsuario = $database->get_results("SELECT 
                                                             u.*
+                                                            ,u.status as usuario_status
                                                             ,p.id as perfil
                                                             ,p.nome as nome_perfil
                                                             FROM usuario u
@@ -55,7 +56,15 @@ $error = isset($_GET['error']) ? $_GET['error'] : null;
                                                             WHERE u.login = '$login' AND u.senha = '$senha'
                                                     ");
             
+// printR($validaUsuario);
+// exit;
 
+            if ($validaUsuario[0]['usuario_status'] == 1) {
+                echo '
+                    <script>
+                    window.location.href = "index.php?error=3";
+                    </script>';
+            }
 
        
 
@@ -76,7 +85,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : null;
                 $_SESSION['loginUser'] = $validaUsuario[0]['login'];
                 $_SESSION['perfilID'] = $validaUsuario[0]['perfil'];
                 $_SESSION['nomePerfilUser'] = $validaUsuario[0]['nome_perfil'];
-                $_SESSION['permissoesMenus'] = array_map(function ($menu){ return $menu['menu_id']; } , $listaMenuIds );
+                $_SESSION['permissoesMenus'] = array_map(function ($menu){ return $menu['menu_id']; } , $listaMenuIds);
 
                 // printR($_SESSION['idPermissao']);
 
@@ -104,7 +113,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : null;
             if ($error == 2) {
                 echo '
                     <div class="alert alert-danger" role="alert">
-                        Usuário ou senha invalido.
+                        Usuário ou senha inválido.
                     </div>';
             }
 
@@ -112,7 +121,7 @@ $error = isset($_GET['error']) ? $_GET['error'] : null;
             if ($error == 3) {
                 echo '
                     <div class="alert alert-warning" role="alert">
-                        Usuário sem permissão.
+                        Usuário inativo.
                     </div>';
             }
             ?>

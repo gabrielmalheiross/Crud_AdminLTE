@@ -58,6 +58,7 @@ $idUser = $_SESSION['idUser'];
                                     <th scope="col">Nome</th>
                                     <th scope="col">Perfil</th>
                                     <th scope="col">Login</th>
+                                    <th scope="col">Status</th>
                                     <th scope="col">Funções</th>
                                 </tr>
                             </thead>
@@ -66,8 +67,10 @@ $idUser = $_SESSION['idUser'];
                                 $usuarios = $database->get_results("SELECT u.*
                                                                             ,p.nome as perfil_nome
                                                                             ,p.id as perfil_id
+                                                                            ,s.nome as status_usuario
                                                                             FROM usuario u 
                                                                             LEFT JOIN perfil p on p.id = u.perfil
+                                                                            LEFT JOIN status s on s.id = u.status
                                                                             ");
 
                                 foreach ($usuarios as $usuario) :
@@ -77,6 +80,7 @@ $idUser = $_SESSION['idUser'];
                                         <td><?= $usuario['nome'] ?></td>
                                         <td><?= $usuario['login'] ?></td>
                                         <td><?= $usuario['perfil_nome'] ?></td>
+                                        <td><?= $usuario['status_usuario'] ?></td>
                                         <td width=150px>
                                             <button type="button" class="btn btn-success btn-sm" onclick="modalEdicao(<?php echo $usuario['id']; ?>)">Editar</button>
                                             <button type="button" class="btn btn-danger btn-sm" onclick="modalExcluir(<?php echo $usuario['id']; ?>)">Excluir</button>
@@ -92,12 +96,16 @@ $idUser = $_SESSION['idUser'];
             </div>
             <?php
             if ($acao == 'save') {
+                $senha = $_POST['senha'];
                 $salvar = [
                     'nome' => $_POST['nome'],
                     'login' => $_POST['login'],
-                    'senha' => md5($_POST['senha']),
-                    'perfil' => $_POST['perfil']
+                    'perfil' => $_POST['perfil'],
+                    'status' => $_POST['status']
                 ];
+                if (isset($senha) && !empty($senha)) {
+                    $salvar['senha'] = md5($senha);
+                }
 
                 if ($_POST['id']) {
                     #################
@@ -110,7 +118,7 @@ $idUser = $_SESSION['idUser'];
                     if ($update) {
                         mensagem('Usuário atualizado com sucesso', 'success');
                         echo "<script> setTimeout(()=>{
-                            location.href = 'grafico.php'
+                            location.href = 'usuariosModal.php'
                         }, 2000) </script>";
                     } else {
                         mensagem('Não foi possível atualizar o usuário', 'danger');
@@ -125,7 +133,7 @@ $idUser = $_SESSION['idUser'];
                     if ($insert) {
                         mensagem('Usuário cadastro com sucesso', 'success');
                         echo "<script> setTimeout(()=>{
-                                    location.href = 'grafico.php'
+                                    location.href = 'usuariosModal.php'
                                 }, 2000) </script>";
                     } else {
                         mensagem('Não foi possível cadastrar o usuário', 'danger');
@@ -140,12 +148,12 @@ $idUser = $_SESSION['idUser'];
                     if ($delete) {
                         mensagem('Usuário deletado com sucesso', 'success');
                         echo "<script> setTimeout(()=>{
-                            location.href = 'grafico.php'
+                            location.href = 'usuariosModal.php'
                         }, 2000) </script>";
                     } else {
                         mensagem('Não foi possível deletar o usuário', 'danger');
                         echo "<script> setTimeout(()=>{
-                            location.href = 'grafico.php'
+                            location.href = 'usuariosModal.php'
                         }, 2000) </script>";
                     }
                 }

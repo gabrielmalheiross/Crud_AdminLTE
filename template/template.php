@@ -36,7 +36,9 @@
                                                             ,menu.icone as icone
                                                             FROM permissao
                                                             LEFT JOIN menu on menu.id = permissao.id_menu
-                                                            WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai is null order by menu.ordem");
+                                                            WHERE permissao.id_perfil = $idPerfilSessao and menu.menu_pai is null 
+                                                            order by menu.ordem
+                                                            ");
 
                         foreach ($menusTemplate as $menuTemplate) {
 

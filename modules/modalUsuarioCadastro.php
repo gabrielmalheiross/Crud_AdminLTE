@@ -13,13 +13,14 @@ $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
 //                                         LEFT JOIN perfil p on p.id = u.perfil 
 //                                         ");
                                                     
-$perfils = $database->get_results("SELECT p.* FROM perfil p ");
+$perfils = $database->get_results("SELECT p.* FROM perfil p");
 
+$status = $database->get_results("SELECT s.* FROM status s");
 
 ?>
 
 
-<form action="grafico.php?acao=save" method="POST" enctype="multipart/form-data">
+<form action="usuariosModal.php?acao=save" method="POST" enctype="multipart/form-data">
     <div class="row">
         <div class="col-1">
             <label for="id">ID:</label>
@@ -48,10 +49,18 @@ $perfils = $database->get_results("SELECT p.* FROM perfil p ");
                 <?php endforeach; ?>
             </select>
         </div>
+        <div class="col-3">
+            <label for="status">Status:</label>
+            <select class="form-control" name="status" required>
+                <?php foreach ($status as $statu) : ?>
+                    <option value="<?= $statu['id'] ?>"> <?= $statu['nome'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
     </div>
 
     <div class="form-group" style="margin-top: 10px;">
-        <a href="./graficos.php" type="button" class="btn btn-danger" data-dismiss="modal">Fechar</a>
+        <a href="./usuariosModal.php" type="button" class="btn btn-danger" data-dismiss="modal">Fechar</a>
         <button type="submit" class="btn btn-primary">Salvar</button>
     </div>
 </form>

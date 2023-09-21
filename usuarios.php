@@ -5,8 +5,6 @@ include "./conexao/validar.php";
 
 $permissaoUsuarioMenuId = 3;
 
-
-
 if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
 
 ?>
@@ -150,7 +148,7 @@ if (in_array($permissaoUsuarioMenuId, $_SESSION['permissoesMenus'])) {
                                     </div>
                                     <div class="col-3">
                                         <label for="senha">Senha:</label>
-                                        <input type="password" class="form-control" name="senha" placeholder="Digite..." required>
+                                        <input type="password" class="form-control" name="senha" placeholder="Digite...">
                                     </div>
                                 </div>
                                 <div class="row">

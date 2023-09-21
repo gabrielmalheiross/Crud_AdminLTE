@@ -10,17 +10,21 @@ $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
 $edicao = $database->get_results("SELECT u.*
                                                         ,p.id as id_perfil
                                                         ,p.nome as nome_perfil
+                                                        ,u.status as usuario_status
                                                         FROM usuario u 
                                                         LEFT JOIN perfil p on p.id = u.perfil 
+                                                        LEFT JOIN status s on s.id = u.status
                                                         WHERE u.id = '$getId'");
                                                         
 $perfils = $database->get_results("SELECT p.* FROM perfil p ");
+
+$sqlStatus = $database->get_results("SELECT s.* FROM status s");
 
 
 ?>
 
 
-<form action="grafico.php?acao=save&id=<?php echo $edicao[0]['id']; ?>" method="POST" enctype="multipart/form-data">
+<form action="usuariosModal.php?acao=save&id=<?php echo $edicao[0]['id']; ?>" method="POST" enctype="multipart/form-data">
     <div class="row">
         <div class="col-1">
             <label for="id">ID:</label>
@@ -51,10 +55,20 @@ $perfils = $database->get_results("SELECT p.* FROM perfil p ");
                 <?php endforeach; ?>
             </select>
         </div>
+        <div class="col-3">
+            <label for="status">Status:</label>
+            <select class="form-control" name="status" required>
+                <?php foreach ($sqlStatus as $status) : ?>
+                    <option value="<?= $status['id'] ?>" <?php if ($edicao[0]['usuario_status'] == $status['id']) {
+                                                                echo "selected";
+                                                            }; ?>> <?= $status['nome'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
     </div>
 
     <div class="form-group" style="margin-top: 10px;">
-        <a href="./graficos.php" type="button" class="btn btn-danger" data-dismiss="modal">Fechar</a>
+        <a href="./usuariosModals.php" type="button" class="btn btn-danger" data-dismiss="modal">Fechar</a>
         <button type="submit" class="btn btn-primary">Salvar</button>
     </div>
 </form>
